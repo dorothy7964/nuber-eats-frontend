@@ -12,6 +12,7 @@
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
     "@types/react-router-dom": "^5.3.3",
+    "concurrently": "^8.2.2",
     "graphql": "^16.9.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -22,8 +23,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "tailwind:build": "tailwind build -i ./src/styles/tailwind.css -o ./src/styles/styles.css",
-    "start": "npm run tailwind:build & nodemon --watch src --exec react-scripts start",
+    "tailwind:build": "tailwindcss -i ./src/styles/tailwind.css -o ./src/styles/styles.css --watch",
+  "start": "concurrently \"nodemon --watch src --exec react-scripts start\" \"npm run tailwind:build\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
