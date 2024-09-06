@@ -1,20 +1,67 @@
+import { useForm } from "react-hook-form";
+
+interface ILoginForm {
+  email?: string;
+  password?: string;
+}
+
 export const Login = () => {
+  const {
+    register,
+    getValues,
+    formState: { errors },
+    handleSubmit
+  } = useForm<ILoginForm>();
+
+  const onSubmit = () => {};
+
   return (
     <div className="h-screen flex items-center justify-center bg-gray-800">
-      <div className="bg-white w-full max-w-lg py-10 rounded-lg text-center">
+      <div className="bg-white w-full max-w-lg pt-10 pb-7 rounded-lg text-center">
         <h3 className="text-2xl text-gray-800">Log In</h3>
-        <form className="flex flex-col mt-5 px-5">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="grid gap-3 mt-5 px-5"
+        >
           <input
-            placeholder="Email"
-            className=" bg-gray-100 shadow-inner border-2 focus:border-opacity-60 focus:border-green-600 focus:outline-none mb-3 py-3 px-5 rounded-lg"
+            {...register("email", {
+              required: "이메일을 입력해 주세요.",
+              pattern: {
+                value: /^[A-Za-z0-9._%+-]+@gmail.com$/,
+                message: "잘못된 이메일 형식입니다. Gmail 주소만 허용됩니다."
+              }
+            })}
+            required
+            type="email"
+            placeholder="email"
+            className="input mb-3"
           />
+          {errors.email?.message && (
+            <span className="font-medium text-red-500">
+              {errors.email?.message}
+            </span>
+          )}
           <input
-            placeholder="Password"
-            className=" bg-gray-100 shadow-inner focus:outline-none border-2 focus:border-opacity-60 focus:border-green-600  py-3 px-5 rounded-lg"
+            {...register("password", {
+              required: "비밀번호를 입력해 주세요.",
+              minLength: 10
+            })}
+            required
+            type="password"
+            placeholder="password"
+            className="input"
           />
-          <button className="py-3 px-5 bg-gray-800 text-white mt-3 text-lg rounded-lg focus:outline-none hover:opacity-90">
-            Log In
-          </button>
+          {errors.password?.message && (
+            <span className="font-medium text-red-500">
+              {errors.password?.message}
+            </span>
+          )}
+          {errors.password?.type === "minLength" && (
+            <span className="font-medium text-red-500">
+              비밀번호는 10자 이상이어야 합니다.
+            </span>
+          )}
+          <button className="btn mt-3">Log In</button>
         </form>
       </div>
     </div>
