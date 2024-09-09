@@ -1,8 +1,20 @@
 import { useForm } from "react-hook-form";
+import { FormError } from "../components/form-error";
+import { gql, useMutation } from "@apollo/client";
+
+export const LOGIN_MUTATION = gql`
+  mutation loginMutation($loginInput: LoginInput!) {
+    login(input: $loginInput) {
+      ok
+      token
+      error
+    }
+  }
+`;
 
 interface ILoginForm {
-  email?: string;
-  password?: string;
+  email: string;
+  password: string;
 }
 
 export const Login = () => {
@@ -13,7 +25,17 @@ export const Login = () => {
     handleSubmit
   } = useForm<ILoginForm>();
 
-  const onSubmit = () => {};
+  const [loginMutation] = useMutation(LOGIN_MUTATION);
+
+  const onSubmit = () => {
+    const { email, password } = getValues();
+    loginMutation({
+      variables: {
+        email,
+        password: 1212121112
+      }
+    });
+  };
 
   return (
     <div className="h-screen flex items-center justify-center bg-gray-800">
@@ -37,9 +59,7 @@ export const Login = () => {
             className="input mb-3"
           />
           {errors.email?.message && (
-            <span className="font-medium text-red-500">
-              {errors.email?.message}
-            </span>
+            <FormError errorMessage={errors.email?.message} />
           )}
           <input
             {...register("password", {
@@ -52,14 +72,10 @@ export const Login = () => {
             className="input"
           />
           {errors.password?.message && (
-            <span className="font-medium text-red-500">
-              {errors.password?.message}
-            </span>
+            <FormError errorMessage={errors.password?.message} />
           )}
           {errors.password?.type === "minLength" && (
-            <span className="font-medium text-red-500">
-              비밀번호는 10자 이상이어야 합니다.
-            </span>
+            <FormError errorMessage=" 비밀번호는 10자 이상이어야 합니다." />
           )}
           <button className="btn mt-3">Log In</button>
         </form>
