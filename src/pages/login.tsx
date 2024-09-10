@@ -1,9 +1,11 @@
 import { useForm } from "react-hook-form";
 import { FormError } from "../components/form-error";
 import { gql, useMutation } from "@apollo/client";
+import { LoginMutation, LoginMutationVariables } from "../__generated__/types";
 
 export const LOGIN_MUTATION = gql`
-  mutation loginMutation($loginInput: LoginInput!) {
+  mutation login($loginInput: LoginInput!) {
+    # (1) gql name을 재설정
     login(input: $loginInput) {
       ok
       token
@@ -25,14 +27,22 @@ export const Login = () => {
     handleSubmit
   } = useForm<ILoginForm>();
 
-  const [loginMutation] = useMutation(LOGIN_MUTATION);
+  const [loginMutation, { data }] = useMutation<
+    LoginMutation,
+    LoginMutationVariables
+  >(LOGIN_MUTATION);
+
+  console.log("📢 [login.tsx:35]", data?.login.ok);
 
   const onSubmit = () => {
     const { email, password } = getValues();
     loginMutation({
       variables: {
-        email,
-        password: 1212121112
+        loginInput: {
+          // GraphQL 쿼리에서 사용하는 변수 이름으로 맞춰서 변경
+          email,
+          password
+        }
       }
     });
   };
