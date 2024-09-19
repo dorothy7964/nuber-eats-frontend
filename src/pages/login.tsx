@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import { LoginMutation, LoginMutationVariables } from "../__generated__/types";
 import { FormError } from "../components/form-error";
 import nuberLogo from "../images/logo_img.svg";
+import { Button } from "../components/button";
+import { Link } from "react-router-dom";
 
 export const LOGIN_MUTATION = gql`
   mutation login($loginInput: LoginInput!) {
@@ -24,9 +26,9 @@ export const Login = () => {
   const {
     register,
     getValues,
-    formState: { errors },
+    formState: { isValid, errors },
     handleSubmit
-  } = useForm<ILoginForm>();
+  } = useForm<ILoginForm>({ mode: "onChange" });
 
   const onCompleted = (data: LoginMutation) => {
     const {
@@ -67,7 +69,7 @@ export const Login = () => {
         </h4>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="grid gap-3 mt-5 w-full"
+          className="grid gap-3 mt-5 w-full mb-5"
         >
           <input
             {...register("email", {
@@ -101,11 +103,17 @@ export const Login = () => {
           {errors.password?.type === "minLength" && (
             <FormError errorMessage=" 비밀번호는 5자 이상이어야 합니다." />
           )}
-          <button className="btn">{loading ? "로딩 중..." : "로그인"}</button>
+          <Button canClick={isValid} loading={loading} actionText={"로그인"} />
           {loginMutationResult?.login.error && (
             <FormError errorMessage={loginMutationResult?.login.error} />
           )}
         </form>
+        <div>
+          계정이 없으신가요??{" "}
+          <Link to="/create-account" className="text-lime-600 hover:underline">
+            계정 만들기
+          </Link>
+        </div>
       </div>
     </div>
   );
