@@ -43,16 +43,18 @@ export const Login = () => {
   >(LOGIN_MUTATION, { onCompleted });
 
   const onSubmit = () => {
-    const { email, password } = getValues();
-    loginMutation({
-      variables: {
-        loginInput: {
-          // GraphQL 쿼리에서 사용하는 변수 이름으로 맞춰서 변경
-          email,
-          password
+    if (!loading) {
+      const { email, password } = getValues();
+      loginMutation({
+        variables: {
+          loginInput: {
+            // GraphQL 쿼리에서 사용하는 변수 이름으로 맞춰서 변경
+            email,
+            password
+          }
         }
-      }
-    });
+      });
+    }
   };
 
   return (
@@ -82,7 +84,7 @@ export const Login = () => {
           <input
             {...register("password", {
               required: "비밀번호를 입력해 주세요.",
-              minLength: 10
+              minLength: 5
             })}
             required
             type="password"
@@ -93,7 +95,7 @@ export const Login = () => {
             <FormError errorMessage={errors.password?.message} />
           )}
           {errors.password?.type === "minLength" && (
-            <FormError errorMessage=" 비밀번호는 10자 이상이어야 합니다." />
+            <FormError errorMessage=" 비밀번호는 5자 이상이어야 합니다." />
           )}
           <button className="btn mt-3">Log In</button>
           {loginMutationResult?.login.error && (

@@ -48,3 +48,16 @@ npm i react-router-dom@5.3.4
 
 - 버전 5.3.4로 사용 중
   <br/><br/>
+
+## graphql-codegen
+
+```javascript
+npm run generate
+```
+
+Graphql 정의 타입스크립트 자동 생성
+
+- codegen.ts에서 GraphQl 스키마를 HTTP URL에서 가져오는 경우 백엔드 서버가 실행되고 있어야 한다.
+
+- 백엔드 실행 없이도 진행하려면, 로컬 스키마 파일을 사용할 것
+  <br/><br/>
