@@ -1,5 +1,3 @@
-import React from "react";
-
 interface IButtonProps {
   canClick: boolean;
   loading: boolean;
