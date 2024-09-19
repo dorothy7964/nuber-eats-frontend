@@ -67,7 +67,7 @@ export const Login = () => {
       <div className="w-full max-w-screen-sm flex flex-col px-5 items-center">
         <img src={nuberLogo} className="w-52 mb-10" alt="logo" />
         <h4 className="w-full font-medium text-left text-3xl mb-5">
-          Welcome back
+          다시 오신 것을 환영합니다.
         </h4>
         <form
           onSubmit={handleSubmit(onSubmit)}
@@ -83,7 +83,7 @@ export const Login = () => {
             })}
             required
             type="email"
-            placeholder="email"
+            placeholder="이메일"
             className="input mb-3"
           />
           {errors.email?.message && (
@@ -96,7 +96,7 @@ export const Login = () => {
             })}
             required
             type="password"
-            placeholder="password"
+            placeholder="비밀번호"
             className="input"
           />
           {errors.password?.message && (
@@ -105,7 +105,7 @@ export const Login = () => {
           {errors.password?.type === "minLength" && (
             <FormError errorMessage=" 비밀번호는 5자 이상이어야 합니다." />
           )}
-          <Button canClick={isValid} loading={loading} actionText={"로그인"} />
+          <Button canClick={isValid} loading={loading} actionText="로그인" />
           {loginMutationResult?.login.error && (
             <FormError errorMessage={loginMutationResult?.login.error} />
           )}

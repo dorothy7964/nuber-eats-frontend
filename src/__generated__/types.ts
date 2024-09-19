@@ -581,6 +581,13 @@ export type VerifyEmailOutput = {
   ok: Scalars['Boolean']['output'];
 };
 
+export type CreateAccountMutationMutationVariables = Exact<{
+  createAccountInput: CreateAccountInput;
+}>;
+
+
+export type CreateAccountMutationMutation = { __typename?: 'Mutation', createAccount: { __typename?: 'CreateAccountOutput', ok?: boolean | null, error?: string | null } };
+
 export type LoginMutationVariables = Exact<{
   loginInput: LoginInput;
 }>;
@@ -589,6 +596,40 @@ export type LoginMutationVariables = Exact<{
 export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginOutput', ok?: boolean | null, token?: string | null, error?: string | null } };
 
 
+export const CreateAccountMutationDocument = gql`
+    mutation createAccountMutation($createAccountInput: CreateAccountInput!) {
+  createAccount(input: $createAccountInput) {
+    ok
+    error
+  }
+}
+    `;
+export type CreateAccountMutationMutationFn = Apollo.MutationFunction<CreateAccountMutationMutation, CreateAccountMutationMutationVariables>;
+
+/**
+ * __useCreateAccountMutationMutation__
+ *
+ * To run a mutation, you first call `useCreateAccountMutationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAccountMutationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createAccountMutationMutation, { data, loading, error }] = useCreateAccountMutationMutation({
+ *   variables: {
+ *      createAccountInput: // value for 'createAccountInput'
+ *   },
+ * });
+ */
+export function useCreateAccountMutationMutation(baseOptions?: Apollo.MutationHookOptions<CreateAccountMutationMutation, CreateAccountMutationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateAccountMutationMutation, CreateAccountMutationMutationVariables>(CreateAccountMutationDocument, options);
+      }
+export type CreateAccountMutationMutationHookResult = ReturnType<typeof useCreateAccountMutationMutation>;
+export type CreateAccountMutationMutationResult = Apollo.MutationResult<CreateAccountMutationMutation>;
+export type CreateAccountMutationMutationOptions = Apollo.BaseMutationOptions<CreateAccountMutationMutation, CreateAccountMutationMutationVariables>;
 export const LoginDocument = gql`
     mutation login($loginInput: LoginInput!) {
   login(input: $loginInput) {
