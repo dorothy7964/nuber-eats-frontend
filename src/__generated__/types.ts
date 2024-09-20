@@ -565,10 +565,14 @@ export type UserProfileOutput = {
   user?: Maybe<User>;
 };
 
+/** 유저 타입 */
 export enum UserRole {
+  /** 고객 */
   Client = 'Client',
+  /** 배달원 */
   Delivery = 'Delivery',
-  Owner = 'Owner'
+  /** 사장 */
+  Owner = 'Owner',
 }
 
 export type VerifyEmailInput = {

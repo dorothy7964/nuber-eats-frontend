@@ -6,6 +6,7 @@ import { FormError } from "../components/form-error";
 import { PageMeta } from "../components/pageMeta ";
 import nuberLogo from "../images/logo_img.svg";
 import { UserRole } from "../__generated__/types";
+import { roleLabels } from "../common/userRole";
 
 const CREATE_ACCOUNT_MUTATION = gql`
   mutation createAccountMutation($createAccountInput: CreateAccountInput!) {
@@ -34,6 +35,7 @@ export const CreateAccount = () => {
       role: UserRole.Client
     }
   });
+
   const [createAccountMutation] = useMutation(CREATE_ACCOUNT_MUTATION);
 
   const onSubmit = () => {};
@@ -87,9 +89,14 @@ export const CreateAccount = () => {
           )}
           {/* 유저 타입  */}
           <select {...register("role")} className="input">
-            {Object.keys(UserRole).map((role, index) => (
-              <option key={index}>{role}</option>
-            ))}
+            {Object.keys(UserRole).map((roleKey, index) => {
+              const roleValue = UserRole[roleKey as keyof typeof UserRole]; // UserRole의 실제 값을 가져온다.
+              return (
+                <option key={index} value={roleValue}>
+                  {roleLabels[roleValue]} {/* 한글로 변환된 값을 표시 */}
+                </option>
+              );
+            })}
           </select>
           <Button canClick={isValid} loading={false} actionText="계정 만들기" />
         </form>
