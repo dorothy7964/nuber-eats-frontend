@@ -6,6 +6,7 @@ import { Button } from "../components/button";
 import { FormError } from "../components/form-error";
 import nuberLogo from "../images/logo_img.svg";
 import { PageMeta } from "../components/pageMeta ";
+import { regexPatterns } from "../common/regexPatterns";
 
 export const LOGIN_MUTATION = gql`
   mutation login($loginInput: LoginInput!) {
@@ -77,8 +78,8 @@ export const Login = () => {
             {...register("email", {
               required: "이메일을 입력해 주세요.",
               pattern: {
-                value: /^[A-Za-z0-9._%+-]+@gmail.com$/,
-                message: "잘못된 이메일 형식입니다. Gmail 주소만 허용됩니다."
+                value: regexPatterns["email"],
+                message: "잘못된 이메일 형식입니다."
               }
             })}
             required

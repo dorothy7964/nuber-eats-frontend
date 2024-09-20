@@ -7,6 +7,7 @@ import { PageMeta } from "../components/pageMeta ";
 import nuberLogo from "../images/logo_img.svg";
 import { UserRole } from "../__generated__/types";
 import { roleLabels } from "../common/userRole";
+import { regexPatterns } from "../common/regexPatterns";
 
 const CREATE_ACCOUNT_MUTATION = gql`
   mutation createAccountMutation($createAccountInput: CreateAccountInput!) {
@@ -58,8 +59,8 @@ export const CreateAccount = () => {
             {...register("email", {
               required: "이메일을 입력해 주세요.",
               pattern: {
-                value: /^[A-Za-z0-9._%+-]+@gmail.com$/,
-                message: "잘못된 이메일 형식입니다. Gmail 주소만 허용됩니다."
+                value: regexPatterns["email"],
+                message: "잘못된 이메일 형식입니다."
               }
             })}
             required
