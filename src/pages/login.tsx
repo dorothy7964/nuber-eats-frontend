@@ -1,6 +1,5 @@
 import { gql, useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
 import { LoginMutation, LoginMutationVariables } from "../__generated__/types";
 import { FormError } from "../components/form-error";
 import { AuthForm } from "../layout/authForm";
@@ -61,7 +60,13 @@ export const Login = () => {
   };
 
   return (
-    <LogoLayout helmetTitle="로그인" title="다시 오신 것을 환영합니다.">
+    <LogoLayout
+      helmetTitle="로그인"
+      title="다시 오신 것을 환영합니다."
+      question="계정이 없으신가요?"
+      linkText="계정 만들기"
+      linkTo="/create-account"
+    >
       <AuthForm
         onSubmit={onSubmit}
         register={register}
@@ -74,13 +79,6 @@ export const Login = () => {
           <FormError errorMessage={loginMutationResult?.login.error} />
         )}
       </AuthForm>
-
-      <div>
-        계정이 없으신가요??{" "}
-        <Link to="/create-account" className="text-lime-600 hover:underline">
-          계정 만들기
-        </Link>
-      </div>
     </LogoLayout>
   );
 };

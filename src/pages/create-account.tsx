@@ -1,6 +1,5 @@
 import { gql, useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
 import { UserRole } from "../__generated__/types";
 import { roleLabels } from "../common/userRole";
 import { AuthForm } from "../layout/authForm";
@@ -40,7 +39,13 @@ export const CreateAccount = () => {
   console.log(watch());
 
   return (
-    <LogoLayout helmetTitle="계정 만들기" title="계정을 만들어 주세요.">
+    <LogoLayout
+      helmetTitle="계정 만들기"
+      title="계정을 만들어 주세요."
+      question=" 이미 계정이 있으신가요?"
+      linkText="지금 로그인"
+      linkTo="/login"
+    >
       <AuthForm
         onSubmit={onSubmit}
         register={register}
@@ -60,13 +65,6 @@ export const CreateAccount = () => {
           })}
         </select>
       </AuthForm>
-
-      <div>
-        이미 계정이 있으신가요?{" "}
-        <Link to="/login" className="text-lime-600 hover:underline">
-          지금 로그인
-        </Link>
-      </div>
     </LogoLayout>
   );
 };
