@@ -572,7 +572,7 @@ export enum UserRole {
   /** 배달원 */
   Delivery = 'Delivery',
   /** 사장 */
-  Owner = 'Owner',
+  Owner = 'Owner'
 }
 
 export type VerifyEmailInput = {
