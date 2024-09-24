@@ -6,7 +6,7 @@ import { AuthForm } from "../layout/authForm";
 import { LogoLayout } from "../layout/logoLayout";
 
 const CREATE_ACCOUNT_MUTATION = gql`
-  mutation createAccountMutation($createAccountInput: CreateAccountInput!) {
+  mutation createAccount($createAccountInput: CreateAccountInput!) {
     createAccount(input: $createAccountInput) {
       ok
       error

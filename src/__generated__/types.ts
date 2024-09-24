@@ -585,12 +585,12 @@ export type VerifyEmailOutput = {
   ok: Scalars['Boolean']['output'];
 };
 
-export type CreateAccountMutationMutationVariables = Exact<{
+export type CreateAccountMutationVariables = Exact<{
   createAccountInput: CreateAccountInput;
 }>;
 
 
-export type CreateAccountMutationMutation = { __typename?: 'Mutation', createAccount: { __typename?: 'CreateAccountOutput', ok?: boolean | null, error?: string | null } };
+export type CreateAccountMutation = { __typename?: 'Mutation', createAccount: { __typename?: 'CreateAccountOutput', ok?: boolean | null, error?: string | null } };
 
 export type LoginMutationVariables = Exact<{
   loginInput: LoginInput;
@@ -600,40 +600,40 @@ export type LoginMutationVariables = Exact<{
 export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginOutput', ok?: boolean | null, token?: string | null, error?: string | null } };
 
 
-export const CreateAccountMutationDocument = gql`
-    mutation createAccountMutation($createAccountInput: CreateAccountInput!) {
+export const CreateAccountDocument = gql`
+    mutation createAccount($createAccountInput: CreateAccountInput!) {
   createAccount(input: $createAccountInput) {
     ok
     error
   }
 }
     `;
-export type CreateAccountMutationMutationFn = Apollo.MutationFunction<CreateAccountMutationMutation, CreateAccountMutationMutationVariables>;
+export type CreateAccountMutationFn = Apollo.MutationFunction<CreateAccountMutation, CreateAccountMutationVariables>;
 
 /**
- * __useCreateAccountMutationMutation__
+ * __useCreateAccountMutation__
  *
- * To run a mutation, you first call `useCreateAccountMutationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateAccountMutationMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateAccountMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAccountMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createAccountMutationMutation, { data, loading, error }] = useCreateAccountMutationMutation({
+ * const [createAccountMutation, { data, loading, error }] = useCreateAccountMutation({
  *   variables: {
  *      createAccountInput: // value for 'createAccountInput'
  *   },
  * });
  */
-export function useCreateAccountMutationMutation(baseOptions?: Apollo.MutationHookOptions<CreateAccountMutationMutation, CreateAccountMutationMutationVariables>) {
+export function useCreateAccountMutation(baseOptions?: Apollo.MutationHookOptions<CreateAccountMutation, CreateAccountMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateAccountMutationMutation, CreateAccountMutationMutationVariables>(CreateAccountMutationDocument, options);
+        return Apollo.useMutation<CreateAccountMutation, CreateAccountMutationVariables>(CreateAccountDocument, options);
       }
-export type CreateAccountMutationMutationHookResult = ReturnType<typeof useCreateAccountMutationMutation>;
-export type CreateAccountMutationMutationResult = Apollo.MutationResult<CreateAccountMutationMutation>;
-export type CreateAccountMutationMutationOptions = Apollo.BaseMutationOptions<CreateAccountMutationMutation, CreateAccountMutationMutationVariables>;
+export type CreateAccountMutationHookResult = ReturnType<typeof useCreateAccountMutation>;
+export type CreateAccountMutationResult = Apollo.MutationResult<CreateAccountMutation>;
+export type CreateAccountMutationOptions = Apollo.BaseMutationOptions<CreateAccountMutation, CreateAccountMutationVariables>;
 export const LoginDocument = gql`
     mutation login($loginInput: LoginInput!) {
   login(input: $loginInput) {
