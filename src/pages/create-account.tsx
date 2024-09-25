@@ -1,9 +1,15 @@
 import { gql, useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
-import { UserRole } from "../__generated__/types";
+import { useHistory } from "react-router-dom";
+import {
+  CreateAccountMutation,
+  CreateAccountMutationVariables,
+  UserRole
+} from "../__generated__/types";
 import { roleLabels } from "../common/userRole";
 import { AuthForm } from "../layout/authForm";
 import { LogoLayout } from "../layout/logoLayout";
+import { FormError } from "../components/form-error";
 
 const CREATE_ACCOUNT_MUTATION = gql`
   mutation createAccount($createAccountInput: CreateAccountInput!) {
@@ -24,6 +30,7 @@ export const CreateAccount = () => {
   const {
     register,
     watch,
+    getValues,
     formState: { isValid, errors },
     handleSubmit
   } = useForm<ICreateAccountForm>({
@@ -33,9 +40,35 @@ export const CreateAccount = () => {
     }
   });
 
-  const [createAccountMutation] = useMutation(CREATE_ACCOUNT_MUTATION);
+  const history = useHistory();
+  const onCompleted = (data: CreateAccountMutation) => {
+    const {
+      createAccount: { ok }
+    } = data;
+    if (ok) {
+      history.push("/");
+    }
+  };
 
-  const onSubmit = () => {};
+  const [
+    createAccountMutation,
+    { loading, data: createAccountMutationResult }
+  ] = useMutation<CreateAccountMutation, CreateAccountMutationVariables>(
+    CREATE_ACCOUNT_MUTATION,
+    {
+      onCompleted
+    }
+  );
+  const onSubmit = () => {
+    if (!loading) {
+      const { email, password, role } = getValues();
+      createAccountMutation({
+        variables: {
+          createAccountInput: { email, password, role }
+        }
+      });
+    }
+  };
   console.log(watch());
 
   return (
@@ -44,14 +77,14 @@ export const CreateAccount = () => {
       title="계정을 만들어 주세요."
       question=" 이미 계정이 있으신가요?"
       linkText="지금 로그인"
-      linkTo="/login"
+      linkTo="/"
     >
       <AuthForm
-        onSubmit={onSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         register={register}
         errors={errors}
         isValid={isValid}
-        loading={false}
+        loading={loading}
         buttonText="계정 만들기"
       >
         <select {...register("role")} className="input">
@@ -64,6 +97,11 @@ export const CreateAccount = () => {
             );
           })}
         </select>
+        {createAccountMutationResult?.createAccount.error && (
+          <FormError
+            errorMessage={createAccountMutationResult.createAccount.error}
+          />
+        )}
       </AuthForm>
     </LogoLayout>
   );

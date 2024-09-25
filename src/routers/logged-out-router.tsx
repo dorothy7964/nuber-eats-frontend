@@ -6,11 +6,11 @@ export const LoggedOutRouter = () => {
   return (
     <Router>
       <Switch>
+        <Route exact path="/">
+          <Login />
+        </Route>
         <Route path="/create-account">
           <CreateAccount />
-        </Route>
-        <Route path="/">
-          <Login />
         </Route>
       </Switch>
     </Router>

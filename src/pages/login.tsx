@@ -4,6 +4,7 @@ import { LoginMutation, LoginMutationVariables } from "../__generated__/types";
 import { FormError } from "../components/form-error";
 import { AuthForm } from "../layout/authForm";
 import { LogoLayout } from "../layout/logoLayout";
+import { isLoggedInVar } from "../apollo";
 
 export const LOGIN_MUTATION = gql`
   mutation login($loginInput: LoginInput!) {
@@ -36,6 +37,7 @@ export const Login = () => {
 
     if (ok && token) {
       console.log("📢 [login.tsx:35]", token);
+      isLoggedInVar(true);
     }
   };
 
@@ -68,7 +70,7 @@ export const Login = () => {
       linkTo="/create-account"
     >
       <AuthForm
-        onSubmit={onSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         register={register}
         errors={errors}
         isValid={isValid}

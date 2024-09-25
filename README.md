@@ -13,16 +13,16 @@
 
 <br/><br/>
 
-## 기술스택
+# 기술스택
 
-#### 프론트엔드
-
-<img width="322" alt="frontend" src="https://user-images.githubusercontent.com/30823551/208224199-257dff7b-0408-4969-8fd5-d79810920483.png">
-<br/><br/>
-
-#### 백엔드
-
-<img width="322" alt="backend" src="https://user-images.githubusercontent.com/30823551/208224200-c565d857-918b-41a5-8940-a50f7a2b8ec9.png">
+- React.js
+- TailwindCSS
+- Apollo
+- React Hook Form
+- apollo-tooling
+- React Testing Library
+- Jest
+- Cypress
 
 <br/><br/>
 
@@ -42,12 +42,25 @@ npm run start
 
 ## react-router-dom
 
+### v6 업그레이드 하기
+
+- react-router-dom은 v6으로 업그레이드 되면서 useHistory가 navigation과 통합되어 사라졌다.
+
+- useNavigate를 사용하여 동일한 기능을 수행 할 수 있다.
+
 ```javascript
-npm i react-router-dom@5.3.4
+npm install react-router-dom@6.2.2
 ```
 
-- 버전 5.3.4로 사용 중
-  <br/><br/>
+<br/><br/>
+
+### ~~버전 5.3.4~~~
+
+```javascript
+// npm i react-router-dom@5.3.4
+```
+
+<br/><br/>
 
 ## graphql-codegen
 
@@ -61,3 +74,10 @@ Graphql 정의 타입스크립트 자동 생성
 
 - 백엔드 실행 없이도 진행하려면, 로컬 스키마 파일을 사용할 것
   <br/><br/>
+
+# 🚨 Trouble Shooting
+
+- ⭕
+- ❌
+
+<br/><br/>
