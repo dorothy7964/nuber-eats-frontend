@@ -23,7 +23,7 @@ export const LogoLayout: React.FC<LogoLayoutProps> = ({
   <div className="h-screen flex items-center flex-col mt-10 lg:mt-28">
     <PageMeta title={helmetTitle} />
     <div className="w-full max-w-screen-sm flex flex-col px-5 items-center">
-      <img src={nuberLogo} className="w-52 mb-10" alt="logo" />
+      <img src={nuberLogo} className="w-52 mb-10" alt="Nuber Eats Logo" />
       <h4 className="w-full font-medium text-left text-3xl mb-5">{title}</h4>
       {children}
     </div>

@@ -46,7 +46,8 @@ export const CreateAccount = () => {
       createAccount: { ok }
     } = data;
     if (ok) {
-      history.push("/");
+      alert("계정 생성! 지금 로그인하세요!");
+      history.push("/login");
     }
   };
 
@@ -59,6 +60,7 @@ export const CreateAccount = () => {
       onCompleted
     }
   );
+
   const onSubmit = () => {
     if (!loading) {
       const { email, password, role } = getValues();
@@ -77,7 +79,7 @@ export const CreateAccount = () => {
       title="계정을 만들어 주세요."
       question=" 이미 계정이 있으신가요?"
       linkText="지금 로그인"
-      linkTo="/"
+      linkTo="/login"
     >
       <AuthForm
         onSubmit={handleSubmit(onSubmit)}

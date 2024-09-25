@@ -4,7 +4,8 @@ import { LoginMutation, LoginMutationVariables } from "../__generated__/types";
 import { FormError } from "../components/form-error";
 import { AuthForm } from "../layout/authForm";
 import { LogoLayout } from "../layout/logoLayout";
-import { isLoggedInVar } from "../apollo";
+import { authTokenVar, isLoggedInVar } from "../apollo";
+import { LOCALSTORAGE_TOKEN } from "../constants";
 
 export const LOGIN_MUTATION = gql`
   mutation login($loginInput: LoginInput!) {
@@ -36,7 +37,8 @@ export const Login = () => {
     } = data;
 
     if (ok && token) {
-      console.log("📢 [login.tsx:35]", token);
+      localStorage.setItem(LOCALSTORAGE_TOKEN, token);
+      authTokenVar(token);
       isLoggedInVar(true);
     }
   };

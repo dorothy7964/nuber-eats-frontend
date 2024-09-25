@@ -75,9 +75,23 @@ Graphql 정의 타입스크립트 자동 생성
 - 백엔드 실행 없이도 진행하려면, 로컬 스키마 파일을 사용할 것
   <br/><br/>
 
+## react-helmet-async
+
+```javascript
+npm i react-helmet-async
+```
+
+https://www.npmjs.com/package/react-helmet-async
+
+<br/><br/>
+
 # 🚨 Trouble Shooting
 
 - ⭕
 - ❌
 
 <br/><br/>
+
+# 🚀 새로운 기능 아이디어
+
+- 로그인 전에 remember me라는 체크리스트를 통해 체크 시 로그인을 유지시키고, 체크하지 않을 시 브라우저 종료시 로그인을 유지시키지 않는 기능도 고려해보기
