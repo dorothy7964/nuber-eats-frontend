@@ -17,7 +17,6 @@ const httpLink = createHttpLink({
 });
 
 const authLink = setContext((_, { headers }) => {
-  console.log("📢 [apollo.ts:20]", headers);
   return {
     headers: {
       ...headers,
