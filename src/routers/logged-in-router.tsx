@@ -1,20 +1,10 @@
-import { gql, useQuery } from "@apollo/client";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
-import { MeQuery, UserRole } from "../__generated__/types";
+import { UserRole } from "../__generated__/types";
 import { FullScreenLoader } from "../components/fullScreenLoader";
+import { Header } from "../components/header";
+import { useMe } from "../hooks/useMe";
 import { NotFound } from "../pages/404";
 import { Restaurants } from "../pages/client/restaurants";
-
-const ME_QUERY = gql`
-  query me {
-    me {
-      id
-      email
-      role
-      verified
-    }
-  }
-`;
 
 /* 각 역할별 경로를 정의하는 타입 */
 interface RouteType {
@@ -38,7 +28,7 @@ const mapRoutes = (routes: RouteType[]) =>
   ));
 
 export const LoggedInRouter = () => {
-  const { data, loading, error } = useQuery<MeQuery>(ME_QUERY);
+  const { data, loading, error } = useMe();
 
   if (!data || loading || error) {
     return <FullScreenLoader />;
@@ -47,6 +37,7 @@ export const LoggedInRouter = () => {
   const { me } = data;
   return (
     <Router>
+      <Header />
       <Switch>
         {me.role === UserRole.Client && mapRoutes(routes.Client)}
         {me.role === UserRole.Owner && mapRoutes(routes.Owner)}
