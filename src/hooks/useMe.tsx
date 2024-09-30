@@ -2,7 +2,7 @@ import { gql, useQuery } from "@apollo/client";
 import { MeQuery } from "../__generated__/types";
 
 const ME_QUERY = gql`
-  query meQuery {
+  query me {
     me {
       id
       email
