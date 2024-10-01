@@ -6,6 +6,7 @@ import { useMe } from "../hooks/useMe";
 import { NotFound } from "../pages/404";
 import { Restaurants } from "../pages/client/restaurants";
 import { ConfirmEmail } from "../pages/user/confirm-email";
+import { EditProfile } from "../pages/user/edit-profile";
 
 /* 각 역할별 경로를 정의하는 타입 */
 interface RouteType {
@@ -17,7 +18,8 @@ interface RouteType {
 const routes: Record<UserRole, RouteType[]> = {
   Client: [
     { path: "/", component: <Restaurants /> },
-    { path: "/confirm", component: <ConfirmEmail /> }
+    { path: "/confirm", component: <ConfirmEmail /> },
+    { path: "/edit-profile", component: <EditProfile /> }
   ],
   Owner: [{ path: "/", component: <div>owner 페이지</div> }],
   Delivery: [{ path: "/", component: <div>delivery 페이지</div> }]

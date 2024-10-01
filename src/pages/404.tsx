@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
+import { Title } from "../components/title";
 
 export const NotFound = () => (
   <div className="h-screen flex flex-col items-center justify-center">
-    <h2 className="font-semibold text-2xl mb-3">404 ERROR</h2>
+    <Title hTag="h2" title="404 ERROR" />
     <h4 className="font-medium text-base mb-5">
       죄송합니다. 페이지를 찾을 수 없습니다.
       <br />

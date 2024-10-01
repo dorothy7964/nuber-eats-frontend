@@ -7,6 +7,7 @@ import {
 } from "../../__generated__/types";
 import { useMe } from "../../hooks/useMe";
 import { useQueryParam } from "../../hooks/useQueryParam";
+import { PageMeta } from "../../components/pageMeta ";
 
 const VERIFY_EMAIL_MUTATION = gql`
   mutation verifyEmail($input: VerifyEmailInput!) {
@@ -27,6 +28,7 @@ export const ConfirmEmail = () => {
       verifyEmail: { ok }
     } = data;
     if (ok && userData?.me.id) {
+      /* 캐시 업데이트 */
       client.writeFragment({
         id: `User:${userData.me.id}`, // 수정할 객체의 ID
         fragment: gql`
@@ -61,10 +63,11 @@ export const ConfirmEmail = () => {
         }
       });
     }
-  }, [code]);
+  }, [verifyEmail, code]);
 
   return (
     <div className="mt-52 flex flex-col items-center justify-center">
+      <PageMeta title="이메일 확인" />
       <h2 className="text-lg mb-1 font-medium">이메일 확인 중...</h2>
       <h4 className="text-gray-700 text-sm">
         잠시만요, 이 페이지를 닫지 마세요...

@@ -4,6 +4,7 @@ import { Button } from "../components/button";
 import { regexPatterns } from "../common/regexPatterns";
 
 interface AuthFormProps {
+  isRequire?: boolean;
   onSubmit: (data: any) => void;
   register: any;
   errors: any;
@@ -14,6 +15,7 @@ interface AuthFormProps {
 }
 
 export const AuthForm: React.FC<AuthFormProps> = ({
+  isRequire = true, // 기본은 true, 프로필 편집일 때 false
   onSubmit,
   register,
   errors,
@@ -26,13 +28,13 @@ export const AuthForm: React.FC<AuthFormProps> = ({
     {/* 이메일 */}
     <input
       {...register("email", {
-        required: "이메일을 입력해 주세요.",
+        required: isRequire ? "이메일을 입력해 주세요." : undefined,
         pattern: {
           value: regexPatterns["email"],
           message: "잘못된 이메일 형식입니다."
         }
       })}
-      required
+      required={isRequire}
       type="email"
       placeholder="이메일"
       className="input mb-3"
@@ -43,10 +45,10 @@ export const AuthForm: React.FC<AuthFormProps> = ({
     {/* 비밀번호 */}
     <input
       {...register("password", {
-        required: "비밀번호를 입력해 주세요.",
+        required: isRequire ? "비밀번호를 입력해 주세요." : undefined,
         minLength: 5
       })}
-      required
+      required={isRequire}
       type="password"
       placeholder="비밀번호"
       className="input"
