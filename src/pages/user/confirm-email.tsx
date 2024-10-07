@@ -1,13 +1,13 @@
-import { gql, useMutation } from "@apollo/client";
+import { gql, useApolloClient, useMutation } from "@apollo/client";
 import { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import {
   VerifyEmailMutation,
   VerifyEmailMutationVariables
 } from "../../__generated__/types";
-import { PageMeta } from "../../components/pageMeta ";
 import { useMe } from "../../hooks/useMe";
 import { useQueryParam } from "../../hooks/useQueryParam";
+import { PageMeta } from "../../components/pageMeta ";
 
 const VERIFY_EMAIL_MUTATION = gql`
   mutation verifyEmail($input: VerifyEmailInput!) {
@@ -19,16 +19,27 @@ const VERIFY_EMAIL_MUTATION = gql`
 `;
 
 export const ConfirmEmail = () => {
-  const { data: userData, refetch } = useMe();
+  const { data: userData } = useMe();
+  const client = useApolloClient();
   const history = useHistory();
 
-  const onCompleted = async (data: VerifyEmailMutation) => {
+  const onCompleted = (data: VerifyEmailMutation) => {
     const {
       verifyEmail: { ok }
     } = data;
     if (ok && userData?.me.id) {
-      /* Query를 Refetch */
-      await refetch();
+      /* 캐시 업데이트 */
+      client.writeFragment({
+        id: `User:${userData.me.id}`, // 수정할 객체의 ID
+        fragment: gql`
+          fragment VerifiedUser on User {
+            verified
+          }
+        `,
+        data: {
+          verified: true // 캐시에 'verified' 필드를 true로 업데이트
+        }
+      });
       history.push("/");
     }
   };
