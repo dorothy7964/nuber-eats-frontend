@@ -1,4 +1,4 @@
-import { gql, useApolloClient, useMutation } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
 import {
   EditProfileMutation,
@@ -25,37 +25,15 @@ interface IEditFormProps {
 }
 
 export const EditProfile = () => {
-  const { data: userData } = useMe();
-  const client = useApolloClient();
+  const { data: userData, refetch } = useMe();
 
-  const onCompleted = (data: EditProfileMutation) => {
+  const onCompleted = async (data: EditProfileMutation) => {
     const {
       editProfile: { ok }
     } = data;
     if (ok && userData) {
-      /* 캐시 업데이트 */
-      const {
-        me: { email: prevEmail, id } // 이전 값이 캐시에 저장되어 있다.
-      } = userData;
-
-      const { email: newEmail } = getValues(); // 수정한 값
-
-      if (prevEmail !== newEmail) {
-        client.writeFragment({
-          id: `User:${id}`, // 수정할 객체의 ID
-          fragment: gql`
-            fragment EditedUser on User {
-              verified
-              email
-            }
-          `,
-          data: {
-            // 캐시에 업데이트 할 값
-            email: newEmail,
-            verified: false
-          }
-        });
-      }
+      /* Query를 Refetch */
+      await refetch();
     }
   };
   const [editProfile, { loading }] = useMutation<
@@ -67,7 +45,6 @@ export const EditProfile = () => {
 
   const {
     register,
-    getValues,
     formState: { isValid, errors },
     handleSubmit
   } = useForm<IEditFormProps>({
@@ -94,7 +71,6 @@ export const EditProfile = () => {
 
   return (
     <AuthFormLayout>
-      {userData?.me.email}
       <PageMeta title="프로필 편집" />
       <Title title="프로필 편집" />
       <AuthForm

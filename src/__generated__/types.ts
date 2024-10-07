@@ -620,9 +620,17 @@ export type EditProfileMutationVariables = Exact<{
 
 export type EditProfileMutation = { __typename?: 'Mutation', editProfile: { __typename?: 'EditProfileOutput', ok?: boolean | null, error?: string | null } };
 
+export type EditedUserFragment = { __typename?: 'User', verified: boolean, email: string };
+
 export const VerifiedUserFragmentDoc = gql`
     fragment VerifiedUser on User {
   verified
+}
+    `;
+export const EditedUserFragmentDoc = gql`
+    fragment EditedUser on User {
+  verified
+  email
 }
     `;
 export const MeDocument = gql`
