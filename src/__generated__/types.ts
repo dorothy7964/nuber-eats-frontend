@@ -590,6 +590,13 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: number, email: string, role: UserRole, verified: boolean } };
 
+export type RestaurantsPageQueryVariables = Exact<{
+  input: RestaurantsInput;
+}>;
+
+
+export type RestaurantsPageQuery = { __typename?: 'Query', allCategories: { __typename?: 'AllCategoriesOutput', ok: boolean, error?: string | null, categories?: Array<{ __typename?: 'Category', id: number, name: string, coverImg?: string | null, slug: string, restaurantCount: number }> | null }, restaurants: { __typename?: 'RestaurantsOutput', ok: boolean, error?: string | null, totalPages?: number | null, totalResults?: number | null, results?: Array<{ __typename?: 'Restaurant', id: number, name: string, coverImg: string, address: string, isPromoted: boolean, category?: { __typename?: 'Category', name: string } | null }> | null } };
+
 export type CreateAccountMutationVariables = Exact<{
   createAccountInput: CreateAccountInput;
 }>;
@@ -675,6 +682,70 @@ export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeSuspenseQueryHookResult = ReturnType<typeof useMeSuspenseQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const RestaurantsPageDocument = gql`
+    query restaurantsPage($input: RestaurantsInput!) {
+  allCategories {
+    ok
+    error
+    categories {
+      id
+      name
+      coverImg
+      slug
+      restaurantCount
+    }
+  }
+  restaurants(input: $input) {
+    ok
+    error
+    totalPages
+    totalResults
+    results {
+      id
+      name
+      coverImg
+      category {
+        name
+      }
+      address
+      isPromoted
+    }
+  }
+}
+    `;
+
+/**
+ * __useRestaurantsPageQuery__
+ *
+ * To run a query within a React component, call `useRestaurantsPageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRestaurantsPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRestaurantsPageQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useRestaurantsPageQuery(baseOptions: Apollo.QueryHookOptions<RestaurantsPageQuery, RestaurantsPageQueryVariables> & ({ variables: RestaurantsPageQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<RestaurantsPageQuery, RestaurantsPageQueryVariables>(RestaurantsPageDocument, options);
+      }
+export function useRestaurantsPageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RestaurantsPageQuery, RestaurantsPageQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<RestaurantsPageQuery, RestaurantsPageQueryVariables>(RestaurantsPageDocument, options);
+        }
+export function useRestaurantsPageSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<RestaurantsPageQuery, RestaurantsPageQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<RestaurantsPageQuery, RestaurantsPageQueryVariables>(RestaurantsPageDocument, options);
+        }
+export type RestaurantsPageQueryHookResult = ReturnType<typeof useRestaurantsPageQuery>;
+export type RestaurantsPageLazyQueryHookResult = ReturnType<typeof useRestaurantsPageLazyQuery>;
+export type RestaurantsPageSuspenseQueryHookResult = ReturnType<typeof useRestaurantsPageSuspenseQuery>;
+export type RestaurantsPageQueryResult = Apollo.QueryResult<RestaurantsPageQuery, RestaurantsPageQueryVariables>;
 export const CreateAccountDocument = gql`
     mutation createAccount($createAccountInput: CreateAccountInput!) {
   createAccount(input: $createAccountInput) {
