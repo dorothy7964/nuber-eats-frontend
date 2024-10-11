@@ -5,6 +5,7 @@ import {
 } from "../../__generated__/types";
 import { PageMeta } from "../../components/pageMeta ";
 import { Restaurant } from "../../components/restaurant";
+import { useState } from "react";
 
 const RESTAURANTS_QUERY = gql`
   query restaurantsPage($input: RestaurantsInput!) {
@@ -38,16 +39,21 @@ const RESTAURANTS_QUERY = gql`
   }
 `;
 export const Restaurants: React.FC = () => {
+  const [page, setPage] = useState<number>(1);
+
   const { data: restaurantsPageData, loading } = useQuery<
     RestaurantsPageQuery,
     RestaurantsPageQueryVariables
   >(RESTAURANTS_QUERY, {
     variables: {
       input: {
-        page: 1
+        page
       }
     }
   });
+
+  const onNextPageClick = () => setPage((current: number) => current + 1);
+  const onPrevPageClick = () => setPage((current: number) => current - 1);
 
   return (
     <div>
@@ -92,6 +98,35 @@ export const Restaurants: React.FC = () => {
                 categoryName={restaurant.category?.name}
               />
             ))}
+          </div>
+
+          {/* 페이지 버튼 */}
+          <div className="grid grid-cols-3 text-center max-w-md items-center mx-auto mt-10">
+            <button
+              onClick={onPrevPageClick}
+              className="arrow-button"
+              style={{ visibility: `${page > 1 ? "visible" : "hidden"}` }}
+            >
+              &larr;
+            </button>
+
+            <span>
+              페이지 {page} 의 {restaurantsPageData?.restaurants.totalPages}
+            </span>
+
+            <button
+              onClick={onNextPageClick}
+              className="arrow-button"
+              style={{
+                visibility: `${
+                  page !== restaurantsPageData?.restaurants.totalPages
+                    ? "visible"
+                    : "hidden"
+                }`
+              }}
+            >
+              &rarr;
+            </button>
           </div>
         </div>
       )}

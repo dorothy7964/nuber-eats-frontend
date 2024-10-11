@@ -5,4 +5,8 @@
   @apply focus:outline-none focus:border-gray-500 p-3 border-2  text-lg border-gray-200 transition-colors;
 }
 
+.arrow-button {
+  @apply focus:outline-none font-medium text-2xl;
+}
+
 @tailwind utilities;
