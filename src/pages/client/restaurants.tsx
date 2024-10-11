@@ -4,6 +4,7 @@ import {
   RestaurantsPageQueryVariables
 } from "../../__generated__/types";
 import { PageMeta } from "../../components/pageMeta ";
+import { Restaurant } from "../../components/restaurant";
 
 const RESTAURANTS_QUERY = gql`
   query restaurantsPage($input: RestaurantsInput!) {
@@ -62,21 +63,34 @@ export const Restaurants: React.FC = () => {
 
       {/* 음식점 카테고리 */}
       {!loading && (
-        <div className="max-w-screen-2xl mx-auto mt-8">
+        <div className="max-w-screen-2xl pb-20 mx-auto mt-8">
           <div className="flex justify-around max-w-sm mx-auto ">
             {restaurantsPageData?.allCategories.categories?.map((category) => (
               <div
                 key={category.id}
-                className="flex flex-col items-center cursor-pointer"
+                className="flex flex-col group items-center cursor-pointer"
               >
                 <div
-                  className="w-14 h-14 bg-cover hover:bg-gray-100 rounded-full"
+                  className="w-16 h-16 bg-cover group-hover:bg-gray-100 rounded-full"
                   style={{ backgroundImage: `url(${category.coverImg})` }}
                 ></div>
                 <span className="mt-1 text-sm text-center font-medium">
                   {category.name}
                 </span>
               </div>
+            ))}
+          </div>
+
+          {/* 음식점 리스트 */}
+          <div className="grid mt-16 md:grid-cols-3 gap-x-5 gap-y-10">
+            {restaurantsPageData?.restaurants.results?.map((restaurant) => (
+              <Restaurant
+                key={restaurant.id}
+                id={restaurant.id + ""}
+                coverImg={restaurant.coverImg}
+                name={restaurant.name}
+                categoryName={restaurant.category?.name}
+              />
             ))}
           </div>
         </div>
