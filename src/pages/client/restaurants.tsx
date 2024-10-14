@@ -6,6 +6,7 @@ import {
 import { PageMeta } from "../../components/pageMeta ";
 import { Restaurant } from "../../components/restaurant";
 import { useState } from "react";
+import { MenuIcon } from "../../components/menuIcon";
 
 const RESTAURANTS_QUERY = gql`
   query restaurantsPage($input: RestaurantsInput!) {
@@ -76,10 +77,9 @@ export const Restaurants: React.FC = () => {
                 key={category.id}
                 className="flex flex-col group items-center cursor-pointer"
               >
-                <div
-                  className="w-16 h-16 bg-cover group-hover:bg-gray-100 rounded-full"
-                  style={{ backgroundImage: `url(${category.coverImg})` }}
-                ></div>
+                <div className="w-16 h-16 group-hover:bg-gray-100 rounded-full flex justify-center items-center">
+                  <MenuIcon coverImg={category.coverImg} />
+                </div>
                 <span className="mt-1 text-sm text-center font-medium">
                   {category.name}
                 </span>

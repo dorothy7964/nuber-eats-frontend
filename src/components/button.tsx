@@ -16,6 +16,6 @@ export const Button: React.FC<IButtonProps> = ({
         : "bg-gray-300 pointer-events-none "
     }`}
   >
-    {loading ? "Loading..." : actionText}
+    {loading ? "로딩 중..." : actionText}
   </button>
 );
