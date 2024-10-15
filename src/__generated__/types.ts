@@ -585,6 +585,10 @@ export type VerifyEmailOutput = {
   ok: Scalars['Boolean']['output'];
 };
 
+export type RestaurantPartsFragment = { __typename?: 'Restaurant', id: number, name: string, coverImg: string, address: string, isPromoted: boolean, category?: { __typename?: 'Category', name: string } | null };
+
+export type CategoryPartsFragment = { __typename?: 'Category', id: number, name: string, coverImg?: string | null, slug: string, restaurantCount: number };
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -596,6 +600,13 @@ export type RestaurantsPageQueryVariables = Exact<{
 
 
 export type RestaurantsPageQuery = { __typename?: 'Query', allCategories: { __typename?: 'AllCategoriesOutput', ok: boolean, error?: string | null, categories?: Array<{ __typename?: 'Category', id: number, name: string, coverImg?: string | null, slug: string, restaurantCount: number }> | null }, restaurants: { __typename?: 'RestaurantsOutput', ok: boolean, error?: string | null, totalPages?: number | null, totalResults?: number | null, results?: Array<{ __typename?: 'Restaurant', id: number, name: string, coverImg: string, address: string, isPromoted: boolean, category?: { __typename?: 'Category', name: string } | null }> | null } };
+
+export type SearchRestaurantQueryVariables = Exact<{
+  input: SearchRestaurantInput;
+}>;
+
+
+export type SearchRestaurantQuery = { __typename?: 'Query', searchRestaurant: { __typename?: 'SearchRestaurantOutput', ok: boolean, error?: string | null, totalPages?: number | null, totalResults?: number | null, restaurants?: Array<{ __typename?: 'Restaurant', id: number, name: string, coverImg: string, address: string, isPromoted: boolean, category?: { __typename?: 'Category', name: string } | null }> | null } };
 
 export type CreateAccountMutationVariables = Exact<{
   createAccountInput: CreateAccountInput;
@@ -629,6 +640,27 @@ export type EditProfileMutation = { __typename?: 'Mutation', editProfile: { __ty
 
 export type EditedUserFragment = { __typename?: 'User', verified: boolean, email: string };
 
+export const RestaurantPartsFragmentDoc = gql`
+    fragment RestaurantParts on Restaurant {
+  id
+  name
+  coverImg
+  category {
+    name
+  }
+  address
+  isPromoted
+}
+    `;
+export const CategoryPartsFragmentDoc = gql`
+    fragment CategoryParts on Category {
+  id
+  name
+  coverImg
+  slug
+  restaurantCount
+}
+    `;
 export const VerifiedUserFragmentDoc = gql`
     fragment VerifiedUser on User {
   verified
@@ -688,11 +720,7 @@ export const RestaurantsPageDocument = gql`
     ok
     error
     categories {
-      id
-      name
-      coverImg
-      slug
-      restaurantCount
+      ...CategoryParts
     }
   }
   restaurants(input: $input) {
@@ -701,18 +729,12 @@ export const RestaurantsPageDocument = gql`
     totalPages
     totalResults
     results {
-      id
-      name
-      coverImg
-      category {
-        name
-      }
-      address
-      isPromoted
+      ...RestaurantParts
     }
   }
 }
-    `;
+    ${CategoryPartsFragmentDoc}
+${RestaurantPartsFragmentDoc}`;
 
 /**
  * __useRestaurantsPageQuery__
@@ -746,6 +768,52 @@ export type RestaurantsPageQueryHookResult = ReturnType<typeof useRestaurantsPag
 export type RestaurantsPageLazyQueryHookResult = ReturnType<typeof useRestaurantsPageLazyQuery>;
 export type RestaurantsPageSuspenseQueryHookResult = ReturnType<typeof useRestaurantsPageSuspenseQuery>;
 export type RestaurantsPageQueryResult = Apollo.QueryResult<RestaurantsPageQuery, RestaurantsPageQueryVariables>;
+export const SearchRestaurantDocument = gql`
+    query searchRestaurant($input: SearchRestaurantInput!) {
+  searchRestaurant(input: $input) {
+    ok
+    error
+    totalPages
+    totalResults
+    restaurants {
+      ...RestaurantParts
+    }
+  }
+}
+    ${RestaurantPartsFragmentDoc}`;
+
+/**
+ * __useSearchRestaurantQuery__
+ *
+ * To run a query within a React component, call `useSearchRestaurantQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchRestaurantQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchRestaurantQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useSearchRestaurantQuery(baseOptions: Apollo.QueryHookOptions<SearchRestaurantQuery, SearchRestaurantQueryVariables> & ({ variables: SearchRestaurantQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchRestaurantQuery, SearchRestaurantQueryVariables>(SearchRestaurantDocument, options);
+      }
+export function useSearchRestaurantLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchRestaurantQuery, SearchRestaurantQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchRestaurantQuery, SearchRestaurantQueryVariables>(SearchRestaurantDocument, options);
+        }
+export function useSearchRestaurantSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<SearchRestaurantQuery, SearchRestaurantQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SearchRestaurantQuery, SearchRestaurantQueryVariables>(SearchRestaurantDocument, options);
+        }
+export type SearchRestaurantQueryHookResult = ReturnType<typeof useSearchRestaurantQuery>;
+export type SearchRestaurantLazyQueryHookResult = ReturnType<typeof useSearchRestaurantLazyQuery>;
+export type SearchRestaurantSuspenseQueryHookResult = ReturnType<typeof useSearchRestaurantSuspenseQuery>;
+export type SearchRestaurantQueryResult = Apollo.QueryResult<SearchRestaurantQuery, SearchRestaurantQueryVariables>;
 export const CreateAccountDocument = gql`
     mutation createAccount($createAccountInput: CreateAccountInput!) {
   createAccount(input: $createAccountInput) {

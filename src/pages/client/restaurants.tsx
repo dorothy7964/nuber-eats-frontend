@@ -10,6 +10,7 @@ import { MenuIcon } from "../../components/menuIcon";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 import { FormError } from "../../components/form-error";
+import { CATEGORY_FRAGMENT, RESTAURANT_FRAGMENT } from "../../fragments";
 
 const RESTAURANTS_QUERY = gql`
   query restaurantsPage($input: RestaurantsInput!) {
@@ -17,11 +18,7 @@ const RESTAURANTS_QUERY = gql`
       ok
       error
       categories {
-        id
-        name
-        coverImg
-        slug
-        restaurantCount
+        ...CategoryParts
       }
     }
     restaurants(input: $input) {
@@ -30,17 +27,12 @@ const RESTAURANTS_QUERY = gql`
       totalPages
       totalResults
       results {
-        id
-        name
-        coverImg
-        category {
-          name
-        }
-        address
-        isPromoted
+        ...RestaurantParts
       }
     }
   }
+  ${RESTAURANT_FRAGMENT}
+  ${CATEGORY_FRAGMENT}
 `;
 
 interface IFormProps {
