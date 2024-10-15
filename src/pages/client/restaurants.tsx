@@ -7,6 +7,9 @@ import { PageMeta } from "../../components/pageMeta ";
 import { Restaurant } from "../../components/restaurant";
 import { useState } from "react";
 import { MenuIcon } from "../../components/menuIcon";
+import { useForm } from "react-hook-form";
+import { useHistory } from "react-router-dom";
+import { FormError } from "../../components/form-error";
 
 const RESTAURANTS_QUERY = gql`
   query restaurantsPage($input: RestaurantsInput!) {
@@ -39,6 +42,11 @@ const RESTAURANTS_QUERY = gql`
     }
   }
 `;
+
+interface IFormProps {
+  searchTerm: string;
+}
+
 export const Restaurants: React.FC = () => {
   const [page, setPage] = useState<number>(1);
 
@@ -56,16 +64,47 @@ export const Restaurants: React.FC = () => {
   const onNextPageClick = () => setPage((current: number) => current + 1);
   const onPrevPageClick = () => setPage((current: number) => current - 1);
 
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    formState: { errors }
+  } = useForm<IFormProps>();
+
+  const history = useHistory();
+
+  const onSearchSubmit = () => {
+    const { searchTerm } = getValues();
+    history.push({
+      pathname: "/search",
+      search: `?term=${searchTerm}`
+    });
+  };
+
   return (
     <div>
       <PageMeta title="홈" />
       {/* 음식점 검색 */}
-      <form className="bg-gray-800 w-full py-40 flex items-center justify-center">
+      <form
+        onSubmit={handleSubmit(onSearchSubmit)}
+        className="bg-gray-800 w-full py-40 flex flex-col items-center justify-center"
+      >
         <input
+          {...register("searchTerm", {
+            required: true,
+            minLength: {
+              value: 2,
+              message: "검색어를 2자 이상 입력해주세요."
+            }
+          })}
           type="Search"
-          className="input rounded-md border-0 w-3/4 md:w-3/12"
           placeholder="음식점 검색..."
+          className="input rounded-md border-0 w-3/4 md:w-3/12 mb-2"
         />
+
+        {errors.searchTerm?.message && (
+          <FormError errorMessage={errors.searchTerm?.message} />
+        )}
       </form>
 
       {/* 음식점 카테고리 */}
