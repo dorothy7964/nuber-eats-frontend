@@ -8,7 +8,7 @@ import { Restaurant } from "../../components/restaurant";
 import { useState } from "react";
 import { MenuIcon } from "../../components/menuIcon";
 import { useForm } from "react-hook-form";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { FormError } from "../../components/form-error";
 import { CATEGORY_FRAGMENT, RESTAURANT_FRAGMENT } from "../../fragments";
 
@@ -102,19 +102,21 @@ export const Restaurants: React.FC = () => {
       {/* 음식점 카테고리 */}
       {!loading && (
         <div className="max-w-screen-2xl pb-20 mx-auto mt-8">
-          <div className="flex justify-around max-w-sm mx-auto ">
+          <div className="flex justify-around max-w-lg mx-auto ">
             {restaurantsPageData?.allCategories.categories?.map((category) => (
-              <div
-                key={category.id}
-                className="flex flex-col group items-center cursor-pointer"
-              >
-                <div className="w-16 h-16 group-hover:bg-gray-100 rounded-full flex justify-center items-center">
-                  <MenuIcon coverImg={category.coverImg} />
+              <Link key={category.id} to={`/category/${category.slug}`}>
+                <div
+                  key={category.id}
+                  className="flex flex-col group items-center cursor-pointer"
+                >
+                  <div className="w-16 h-16 group-hover:bg-gray-100 rounded-full flex justify-center items-center">
+                    <MenuIcon coverImg={category.coverImg} />
+                  </div>
+                  <span className="mt-1 text-sm text-center font-medium">
+                    {category.name}
+                  </span>
                 </div>
-                <span className="mt-1 text-sm text-center font-medium">
-                  {category.name}
-                </span>
-              </div>
+              </Link>
             ))}
           </div>
 
