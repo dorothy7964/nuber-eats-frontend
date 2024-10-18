@@ -59,10 +59,11 @@ export const Restaurants: React.FC = () => {
 
       {/* 음식점 카테고리 */}
       {!loading && (
-        <div className="max-w-screen-2xl pb-20 mx-auto mt-8">
-          <div className="flex justify-around max-w-lg mx-auto ">
+        <div className="wrapper-list">
+          <div className="wrapper-category">
             {restaurantsPageData?.allCategories.categories?.map((category) => (
               <CategoryList
+                key={category.id}
                 id={category.id}
                 name={category.name}
                 slug={category.slug}
@@ -72,7 +73,7 @@ export const Restaurants: React.FC = () => {
           </div>
 
           {/* 음식점 리스트 */}
-          <div className="grid mt-16 md:grid-cols-3 gap-x-5 gap-y-10">
+          <div className="grid-list">
             {restaurantsPageData?.restaurants.results?.map((restaurant) => (
               <Restaurant
                 key={restaurant.id}

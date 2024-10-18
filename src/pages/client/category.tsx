@@ -6,6 +6,7 @@ import {
   CategoryQueryVariables
 } from "../../__generated__/types";
 import { FullScreenLoader } from "../../components/fullScreenLoader";
+import { Restaurant } from "../../components/restaurant";
 
 const CATEGORY_QUERY = gql`
   query category($input: CategoryInput!) {
@@ -32,19 +33,36 @@ interface ICategoryParams {
 
 export const Category = () => {
   const params = useParams<ICategoryParams>();
-  const { data, loading } = useQuery<CategoryQuery, CategoryQueryVariables>(
-    CATEGORY_QUERY,
-    {
-      variables: {
-        input: {
-          page: 1,
-          slug: params.slug
-        }
+  const { data: categoryData, loading } = useQuery<
+    CategoryQuery,
+    CategoryQueryVariables
+  >(CATEGORY_QUERY, {
+    variables: {
+      input: {
+        page: 1,
+        slug: params.slug
       }
     }
-  );
-  console.log(data);
+  });
 
   if (loading) return <FullScreenLoader />;
-  return <h1>Category</h1>;
+
+  if (!categoryData || !categoryData?.category.restaurants)
+    return <div>데이터가 없음</div>;
+
+  return (
+    <div className="wrapper-list">
+      <div className="grid-list">
+        {categoryData?.category.restaurants.map((restaurant) => (
+          <Restaurant
+            key={restaurant.id}
+            id={restaurant.id + ""}
+            coverImg={restaurant.coverImg}
+            name={restaurant.name}
+            categoryName={restaurant.category?.name}
+          />
+        ))}
+      </div>
+    </div>
+  );
 };
