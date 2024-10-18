@@ -10,6 +10,7 @@ import { Restaurant } from "../../components/restaurant";
 import { PageButton } from "../../components/pageButton";
 import { useState } from "react";
 import { CategoryList } from "../../components/categoryList";
+import { PageMeta } from "../../components/pageMeta ";
 
 const CATEGORY_QUERY = gql`
   query category($input: CategoryInput!) {
@@ -59,6 +60,8 @@ export const Category = () => {
 
   return (
     <div className="wrapper-list">
+      <PageMeta title={`${params.slug} 목록`} />
+
       {/* 음식점 카테고리 */}
       <CategoryList />
 
