@@ -7,6 +7,9 @@ import {
 } from "../../__generated__/types";
 import { FullScreenLoader } from "../../components/fullScreenLoader";
 import { Restaurant } from "../../components/restaurant";
+import { PageButton } from "../../components/pageButton";
+import { useState } from "react";
+import { CategoryList } from "../../components/categoryList";
 
 const CATEGORY_QUERY = gql`
   query category($input: CategoryInput!) {
@@ -33,25 +36,33 @@ interface ICategoryParams {
 
 export const Category = () => {
   const params = useParams<ICategoryParams>();
+
+  const [page, setPage] = useState<number>(1);
+
   const { data: categoryData, loading } = useQuery<
     CategoryQuery,
     CategoryQueryVariables
   >(CATEGORY_QUERY, {
     variables: {
       input: {
-        page: 1,
+        page,
         slug: params.slug
       }
     }
   });
 
-  if (loading) return <FullScreenLoader />;
+  const onNextPageClick = () => setPage((current: number) => current + 1);
+  const onPrevPageClick = () => setPage((current: number) => current - 1);
 
-  if (!categoryData || !categoryData?.category.restaurants)
-    return <div>데이터가 없음</div>;
+  if (loading || !categoryData || !categoryData?.category.restaurants)
+    return <FullScreenLoader />;
 
   return (
     <div className="wrapper-list">
+      {/* 음식점 카테고리 */}
+      <CategoryList />
+
+      {/* 카테고리 검색 리스트 */}
       <div className="grid-list">
         {categoryData?.category.restaurants.map((restaurant) => (
           <Restaurant
@@ -63,6 +74,14 @@ export const Category = () => {
           />
         ))}
       </div>
+
+      {/* 페이지 버튼 */}
+      <PageButton
+        page={page}
+        totalPages={categoryData?.category.totalPages}
+        onNextPageClick={onNextPageClick}
+        onPrevPageClick={onPrevPageClick}
+      />
     </div>
   );
 };

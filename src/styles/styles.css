@@ -545,14 +545,6 @@ video {
   --tw-contain-style:  ;
 }
 
-.wrapper-category {
-  margin-left: auto;
-  margin-right: auto;
-  display: flex;
-  max-width: 32rem;
-  justify-content: space-around;
-}
-
 .wrapper-list {
   margin-left: auto;
   margin-right: auto;

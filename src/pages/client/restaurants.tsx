@@ -5,21 +5,14 @@ import {
   RestaurantsPageQueryVariables
 } from "../../__generated__/types";
 import { CategoryList } from "../../components/categoryList";
+import { FoodSearch } from "../../components/foodSearch";
 import { PageButton } from "../../components/pageButton";
 import { PageMeta } from "../../components/pageMeta ";
 import { Restaurant } from "../../components/restaurant";
-import { CATEGORY_FRAGMENT, RESTAURANT_FRAGMENT } from "../../fragments";
-import { FoodSearch } from "../../components/foodSearch";
+import { RESTAURANT_FRAGMENT } from "../../fragments";
 
 const RESTAURANTS_QUERY = gql`
   query restaurantsPage($input: RestaurantsInput!) {
-    allCategories {
-      ok
-      error
-      categories {
-        ...CategoryParts
-      }
-    }
     restaurants(input: $input) {
       ok
       error
@@ -31,7 +24,6 @@ const RESTAURANTS_QUERY = gql`
     }
   }
   ${RESTAURANT_FRAGMENT}
-  ${CATEGORY_FRAGMENT}
 `;
 
 export const Restaurants: React.FC = () => {
@@ -57,20 +49,10 @@ export const Restaurants: React.FC = () => {
       {/* 음식점 검색 */}
       <FoodSearch />
 
-      {/* 음식점 카테고리 */}
       {!loading && (
         <div className="wrapper-list">
-          <div className="wrapper-category">
-            {restaurantsPageData?.allCategories.categories?.map((category) => (
-              <CategoryList
-                key={category.id}
-                id={category.id}
-                name={category.name}
-                slug={category.slug}
-                coverImg={category.coverImg}
-              />
-            ))}
-          </div>
+          {/* 음식점 카테고리 */}
+          <CategoryList />
 
           {/* 음식점 리스트 */}
           <div className="grid-list">
