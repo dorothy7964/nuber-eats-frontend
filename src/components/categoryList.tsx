@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { MenuIcon } from "./menuIcon";
 import { gql, useQuery } from "@apollo/client";
 import { CATEGORY_FRAGMENT } from "../fragments";
@@ -20,7 +20,13 @@ const ALLCATEGORY_QUERY = gql`
   ${CATEGORY_FRAGMENT}
 `;
 
+interface ICategoryParams {
+  slug?: string;
+}
+
 export const CategoryList: React.FC = () => {
+  const params = useParams<ICategoryParams>();
+
   const { data: allCategoryData } = useQuery<
     AllCategoriesQuery,
     AllCategoriesQueryVariables
@@ -34,10 +40,17 @@ export const CategoryList: React.FC = () => {
             key={category.id}
             className="flex flex-col group items-center cursor-pointer"
           >
-            <div className="w-16 h-16 group-hover:bg-gray-100 rounded-full flex justify-center items-center">
+            <div
+              className={`w-16 h-16 group-hover:bg-gray-100 rounded-full flex justify-center items-center
+                ${category.slug === params.slug ? "bg-gray-200" : ""}`}
+            >
               <MenuIcon coverImg={category.coverImg} />
             </div>
-            <span className="mt-1 text-sm text-center font-medium">
+            <span
+              className={`mt-1 text-sm text-center ${
+                category.slug === params.slug ? "font-bold" : "font-medium"
+              }`}
+            >
               {category.name}
             </span>
           </div>
