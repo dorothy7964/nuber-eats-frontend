@@ -37,7 +37,7 @@ export const Search: React.FC = () => {
 
   useEffect(() => {
     // URL에서 쿼리 파라미터를 추출하고 디코딩
-    const [_, query] = location.search.split("?term=");
+    const [, query] = location.search.split("?term=");
     const searchTerm = decodeURIComponent(query);
 
     if (!searchTerm) {

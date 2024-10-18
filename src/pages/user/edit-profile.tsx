@@ -82,7 +82,7 @@ export const EditProfile = () => {
     if (!loading) {
       // 빈 값을 필터링 (빈 값이 없는 객체 출력)
       const filteredData = Object.fromEntries(
-        Object.entries(editData).filter(([_, value]) => value !== "")
+        Object.entries(editData).filter(([, value]) => value !== "")
       );
 
       editProfile({
