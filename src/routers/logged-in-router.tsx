@@ -4,11 +4,12 @@ import { FullScreenLoader } from "../components/fullScreenLoader";
 import { Header } from "../components/header";
 import { useMe } from "../hooks/useMe";
 import { NotFound } from "../pages/404";
+import { Category } from "../pages/client/category";
+import { Restaurant } from "../pages/client/restaurant";
 import { Restaurants } from "../pages/client/restaurants";
+import { Search } from "../pages/client/search";
 import { ConfirmEmail } from "../pages/user/confirm-email";
 import { EditProfile } from "../pages/user/edit-profile";
-import { Search } from "../pages/client/search";
-import { Category } from "../pages/client/category";
 
 /* 각 역할별 경로를 정의하는 타입 */
 interface RouteType {
@@ -23,7 +24,8 @@ const routes: Record<UserRole, RouteType[]> = {
     { path: "/confirm", component: <ConfirmEmail /> },
     { path: "/edit-profile", component: <EditProfile /> },
     { path: "/search", component: <Search /> },
-    { path: "/category/:slug", component: <Category /> }
+    { path: "/category/:slug", component: <Category /> },
+    { path: "/restaurant/:id", component: <Restaurant /> }
   ],
   Owner: [{ path: "/", component: <div>owner 페이지</div> }],
   Delivery: [{ path: "/", component: <div>delivery 페이지</div> }]
