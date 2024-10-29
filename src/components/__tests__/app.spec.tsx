@@ -15,12 +15,12 @@ jest.mock("../../routers/logged-in-router", () => {
 });
 
 describe("<App />", () => {
-  it("renders LoggedOutRouter", () => {
+  it("로그아웃된 라우터를 렌더링 합니다.", () => {
     render(<App />);
     screen.getByText("logged-out");
   });
 
-  it("renders LoggedInRouter", async () => {
+  it("로그인된 라우터를 렌더링 합니다.", async () => {
     render(<App />);
     await waitFor(() => {
       isLoggedInVar(true);

@@ -950,10 +950,6 @@ video {
   background-color: rgb(77 124 15 / var(--tw-bg-opacity));
 }
 
-.hover\:font-bold:hover {
-  font-weight: 700;
-}
-
 .hover\:underline:hover {
   text-decoration-line: underline;
 }
