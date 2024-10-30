@@ -6,6 +6,6 @@ interface IHelmetProps {
 
 export const PageMeta: React.FC<IHelmetProps> = ({ title }) => (
   <Helmet>
-    <title> {title} | Nuber Eats</title>
+    <title>{title} | Nuber Eats</title>
   </Helmet>
 );

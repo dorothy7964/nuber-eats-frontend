@@ -1,7 +1,6 @@
 import { render } from "@testing-library/react";
 import { Restaurant } from "../restaurant";
 import { BrowserRouter as Router } from "react-router-dom";
-import { debug } from "console";
 
 describe("<Restaurant />", () => {
   it("props와 함께 정상적으로 렌더링되어야 합니다.", () => {
