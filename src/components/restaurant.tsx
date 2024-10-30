@@ -19,7 +19,7 @@ export const Restaurant: React.FC<IRestaurantProps> = ({
         style={{ backgroundImage: `url(${coverImg})` }}
         className="bg-cover bg-center mb-3 py-28"
       ></div>
-      <h3 className="text-xl">{name}</h3>
+      <h3 className="text-xl">{name}</h3>20.3 FormError and Restaurant Tests
       <span className="border-t mt-2 py-2 text-xs opacity-50 border-gray-400">
         {categoryName}
       </span>
