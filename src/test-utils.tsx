@@ -1,3 +1,6 @@
+// Testing React components
+// https://www.apollographql.com/docs/react/development-testing/testing#example
+
 import React from "react";
 import { render } from "@testing-library/react";
 import { HelmetProvider } from "react-helmet-async";
