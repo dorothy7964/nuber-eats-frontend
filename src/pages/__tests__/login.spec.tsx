@@ -1,22 +1,22 @@
 import { ApolloProvider } from "@apollo/client";
-import { render, RenderResult, waitFor } from "@testing-library/react";
+import { act, render, RenderResult, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createMockClient } from "mock-apollo-client";
+import { createMockClient, MockApolloClient } from "mock-apollo-client";
 import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter as Router } from "react-router-dom";
-import { Login } from "../login";
-import { debug } from "console";
+import { Login, LOGIN_MUTATION } from "../login";
 
 describe("<Login />", () => {
   let renderResult: RenderResult;
+  let mockClient: MockApolloClient;
 
   beforeEach(async () => {
-    const mockedClient = createMockClient();
+    mockClient = createMockClient();
 
     renderResult = render(
       <HelmetProvider>
         <Router>
-          <ApolloProvider client={mockedClient}>
+          <ApolloProvider client={mockClient}>
             <Login />
           </ApolloProvider>
         </Router>
@@ -48,6 +48,79 @@ describe("<Login />", () => {
     await waitFor(() => {
       const errorMessage = getByRole("alert");
       expect(errorMessage).toHaveTextContent("이메일을 입력해 주세요.");
+    });
+  });
+
+  it("비밀번호 입력하지 않았다면 오류를 표시해야 합니다.", async () => {
+    const { getByPlaceholderText, getByRole } = renderResult;
+    const email = getByPlaceholderText("이메일");
+    const submitBtn = getByRole("button");
+
+    await act(async () => {
+      userEvent.type(email, "test@gmail.com");
+      userEvent.click(submitBtn);
+    });
+
+    await waitFor(() => {
+      const errorMessage = getByRole("alert");
+      expect(errorMessage).toHaveTextContent("비밀번호를 입력해 주세요.");
+    });
+  });
+
+  it("비밀번호의 최소 글자 수를 충족하지 못하면 오류 메시지가 표시되어야 합니다.", async () => {
+    const { getByPlaceholderText, getByRole } = renderResult;
+    const email = getByPlaceholderText("이메일");
+    const password = getByPlaceholderText("비밀번호");
+    const submitBtn = getByRole("button");
+
+    await act(async () => {
+      userEvent.type(email, "test@gmail.com");
+      userEvent.type(password, "비밀");
+      userEvent.click(submitBtn);
+    });
+
+    await waitFor(() => {
+      const errorMessage = getByRole("alert");
+      expect(errorMessage).toHaveTextContent(
+        "비밀번호는 5자 이상이어야 합니다."
+      );
+    });
+  });
+
+  it("Form을 제출하고 Muatation을 호출해야 합니다.", async () => {
+    const { getByPlaceholderText, getByRole, debug } = renderResult;
+    const email = getByPlaceholderText("이메일");
+    const password = getByPlaceholderText("비밀번호");
+    const submitBtn = getByRole("button");
+    const formData = {
+      email: "real@test.com",
+      password: "123123"
+    };
+
+    const mockedMutationResponse = jest.fn().mockResolvedValue({
+      data: {
+        login: {
+          ok: true,
+          token: "XXX",
+          error: null
+          // error: "mutation-error"
+        }
+      }
+    });
+    mockClient.setRequestHandler(LOGIN_MUTATION, mockedMutationResponse);
+
+    await act(async () => {
+      userEvent.type(email, formData.email);
+      userEvent.type(password, formData.password);
+      userEvent.click(submitBtn);
+    });
+
+    expect(mockedMutationResponse).toHaveBeenCalledTimes(1);
+    expect(mockedMutationResponse).toHaveBeenCalledWith({
+      loginInput: {
+        email: formData.email,
+        password: formData.password
+      }
     });
   });
 });
