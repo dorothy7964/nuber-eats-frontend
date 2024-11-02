@@ -88,7 +88,7 @@ describe("<Login />", () => {
   });
 
   it("Form을 제출하고 Muatation을 호출해야 합니다.", async () => {
-    const { getByPlaceholderText, getByRole, debug } = renderResult;
+    const { getByPlaceholderText, getByRole } = renderResult;
     const email = getByPlaceholderText("이메일");
     const password = getByPlaceholderText("비밀번호");
     const submitBtn = getByRole("button");
@@ -102,12 +102,13 @@ describe("<Login />", () => {
         login: {
           ok: true,
           token: "XXX",
-          error: null
-          // error: "mutation-error"
+          error: "mutation-error"
         }
       }
     });
     mockClient.setRequestHandler(LOGIN_MUTATION, mockedMutationResponse);
+
+    jest.spyOn(Storage.prototype, "setItem");
 
     await act(async () => {
       userEvent.type(email, formData.email);
@@ -122,5 +123,10 @@ describe("<Login />", () => {
         password: formData.password
       }
     });
+
+    const errorMessage = getByRole("alert");
+    expect(errorMessage).toHaveTextContent(/mutation-error/i);
+
+    expect(localStorage.setItem).toHaveBeenCalledWith("nuber-token", "XXX");
   });
 });
