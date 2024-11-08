@@ -1,9 +1,8 @@
 import { ApolloProvider } from "@apollo/client";
-import { act, render, RenderResult, waitFor } from "@testing-library/react";
+import { act, RenderResult } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createMockClient, MockApolloClient } from "mock-apollo-client";
-import { HelmetProvider } from "react-helmet-async";
-import { BrowserRouter as Router } from "react-router-dom";
+import { render, waitFor } from "../../test-utils";
 import { Login, LOGIN_MUTATION } from "../login";
 
 describe("<Login />", () => {
@@ -14,13 +13,9 @@ describe("<Login />", () => {
     mockClient = createMockClient();
 
     renderResult = render(
-      <HelmetProvider>
-        <Router>
-          <ApolloProvider client={mockClient}>
-            <Login />
-          </ApolloProvider>
-        </Router>
-      </HelmetProvider>
+      <ApolloProvider client={mockClient}>
+        <Login />
+      </ApolloProvider>
     );
   });
 
