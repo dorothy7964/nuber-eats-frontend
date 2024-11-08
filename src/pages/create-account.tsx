@@ -11,7 +11,7 @@ import { AuthForm } from "../layout/authForm";
 import { LogoLayout } from "../layout/logoLayout";
 import { FormError } from "../components/form-error";
 
-const CREATE_ACCOUNT_MUTATION = gql`
+export const CREATE_ACCOUNT_MUTATION = gql`
   mutation createAccount($createAccountInput: CreateAccountInput!) {
     createAccount(input: $createAccountInput) {
       ok
