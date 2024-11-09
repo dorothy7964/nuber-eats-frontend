@@ -16,6 +16,8 @@ export const PageButton: React.FC<PageButtonProps> = ({
   return (
     <div className="grid grid-cols-3 text-center max-w-md items-center mx-auto mt-10">
       <button
+        role="button"
+        aria-label="prev-button"
         onClick={onPrevPageClick}
         className="arrow-button"
         style={{ visibility: `${page > 1 ? "visible" : "hidden"}` }}
@@ -28,6 +30,8 @@ export const PageButton: React.FC<PageButtonProps> = ({
       </span>
 
       <button
+        role="button"
+        aria-label="next-button"
         onClick={onNextPageClick}
         className="arrow-button"
         style={{
