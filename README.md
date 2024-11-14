@@ -91,6 +91,21 @@ https://www.npmjs.com/package/react-helmet-async
 
 <br/><br/>
 
+## Cypress
+
+```javascript
+// 프레임워크 열기
+npx cypress open
+```
+
+E2E 테스팅 프레임워크<br/>
+
+- 브라우저에서 사용자의 동작을 흉내 내어 실제 사용 환경에 가까운 테스트를 할 수 있게 해준다.
+
+https://www.cypress.io/
+
+<br/><br/>
+
 # 🚨 Trouble Shooting
 
 - ⭕
