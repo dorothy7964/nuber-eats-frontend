@@ -35,3 +35,6 @@
 //     }
 //   }
 // }
+
+// cypress 명령어 확장
+import "@testing-library/cypress/add-commands";
