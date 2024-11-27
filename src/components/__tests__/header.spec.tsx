@@ -4,27 +4,28 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { Header } from "../header";
 import { ME_QUERY } from "../../hooks/useMe";
 
+// Apollo Client mock 설정
+const mocks = (verified: boolean) => [
+  {
+    request: {
+      query: ME_QUERY
+    },
+    result: {
+      data: {
+        me: {
+          id: 1,
+          email: "email",
+          role: "role",
+          verified
+        }
+      }
+    }
+  }
+];
+
 const renderWithMeQuery = (verified: boolean) => {
   return render(
-    <MockedProvider
-      mocks={[
-        {
-          request: {
-            query: ME_QUERY
-          },
-          result: {
-            data: {
-              me: {
-                id: 1,
-                email: "email",
-                role: "role",
-                verified
-              }
-            }
-          }
-        }
-      ]}
-    >
+    <MockedProvider mocks={mocks(verified)}>
       <Router>
         <Header />
       </Router>

@@ -7,7 +7,7 @@ import {
   AllCategoriesQueryVariables
 } from "../__generated__/types";
 
-const ALLCATEGORY_QUERY = gql`
+export const ALLCATEGORY_QUERY = gql`
   query allCategories {
     allCategories {
       ok
