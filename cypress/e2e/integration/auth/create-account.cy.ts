@@ -18,15 +18,34 @@ describe("계정 만들기", () => {
   });
 
   it("계정을 생성하고 로그인해야 합니다.", () => {
+    // cypress를 이용해 request를 가로채기 (localhost:4000/graphql을 Intercept 하기)
+    user.intercept("http://localhost:4000/graphql", (req) => {
+      const { operationName } = req.body;
+      if (operationName && operationName === "createAccount") {
+        req.reply((res) => {
+          res.send({
+            data: {
+              createAccount: {
+                ok: true,
+                error: null,
+                __typename: "CreateAccountOutput"
+              }
+            }
+          });
+        });
+      }
+    });
+
     // 계정 생성
     user.visit("/create-account");
-    user.findByPlaceholderText("이메일").type("testClient10@mail.com");
+    user.findByPlaceholderText("이메일").type("testClient16@mail.com");
     user.findByPlaceholderText("비밀번호").type("123123");
     user.findByRole("button").click();
 
     // 만든 계정으로 로그인
     user.wait(2000);
-    user.findByPlaceholderText("이메일").type("testClient10@mail.com");
+    user.title().should("eq", "로그인 | Nuber Eats");
+    user.findByPlaceholderText("이메일").type("testClient16@mail.com");
     user.findByPlaceholderText("비밀번호").type("123123");
     user.findByRole("button").click();
     user.window().its("localStorage.nuber-token").should("be.a", "string");
