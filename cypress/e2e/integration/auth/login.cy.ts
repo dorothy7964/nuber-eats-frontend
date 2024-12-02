@@ -19,13 +19,6 @@ describe("로그인", () => {
   });
 
   it("양식을 작성하고 로그인해야 합니다.", () => {
-    user.visit("/");
-    user.findByPlaceholderText("이메일").type("client@mail.com");
-    user.findByPlaceholderText("비밀번호").type("123123");
-    user
-      .findByRole("button")
-      .should("not.have.class", "pointer-events-none")
-      .click();
-    user.window().its("localStorage.nuber-token").should("be.a", "string");
+    user.login("client@mail.com", "123123");
   });
 });

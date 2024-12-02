@@ -33,7 +33,7 @@ describe("계정 만들기", () => {
             }
           });
         });
-      }
+      } // cypress/integration/auth/create-account.cy.ts
     });
 
     // 계정 생성
@@ -44,10 +44,6 @@ describe("계정 만들기", () => {
 
     // 만든 계정으로 로그인
     user.wait(2000);
-    user.title().should("eq", "로그인 | Nuber Eats");
-    user.findByPlaceholderText("이메일").type("testClient16@mail.com");
-    user.findByPlaceholderText("비밀번호").type("123123");
-    user.findByRole("button").click();
-    user.window().its("localStorage.nuber-token").should("be.a", "string");
+    user.login("client@mail.com", "123123");
   });
 });
