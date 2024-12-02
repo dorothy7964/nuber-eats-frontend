@@ -7,6 +7,7 @@ declare namespace Cypress {
      */
     assertLoggedIn(): Chainable<Subject>;
     assertLoggedOut(): Chainable<Subject>;
+    assertTitle(title): Chainable<Subject>;
     login(email, password): Chainable<Subject>;
   }
 }

@@ -47,10 +47,14 @@ Cypress.Commands.add("assertLoggedOut", () => {
   cy.window().its("localStorage.nuber-token").should("be.undefined");
 });
 
+Cypress.Commands.add("assertTitle", (title) => {
+  cy.title().should("eq", `${title} | Nuber Eats`);
+});
+
 Cypress.Commands.add("login", (email, password) => {
   cy.visit("/");
   cy.assertLoggedOut();
-  cy.title().should("eq", "로그인 | Nuber Eats");
+  cy.assertTitle("로그인");
   cy.findByPlaceholderText("이메일").type(email);
   cy.findByPlaceholderText("비밀번호").type(password);
   cy.findByRole("button")
