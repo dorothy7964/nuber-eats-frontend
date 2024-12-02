@@ -23,17 +23,9 @@ describe("계정 만들기", () => {
       const { operationName } = req.body;
       if (operationName && operationName === "createAccount") {
         req.reply((res) => {
-          res.send({
-            data: {
-              createAccount: {
-                ok: true,
-                error: null,
-                __typename: "CreateAccountOutput"
-              }
-            }
-          });
+          res.send({ fixture: "auth/create-account.json" });
         });
-      } // cypress/integration/auth/create-account.cy.ts
+      }
     });
 
     // 계정 생성
