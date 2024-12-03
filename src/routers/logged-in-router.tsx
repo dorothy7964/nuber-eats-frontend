@@ -10,6 +10,7 @@ import { Restaurants } from "../pages/client/restaurants";
 import { Search } from "../pages/client/search";
 import { ConfirmEmail } from "../pages/user/confirm-email";
 import { EditProfile } from "../pages/user/edit-profile";
+import { MyRestaurants } from "../pages/owner/my-restaurants";
 
 /* 각 역할별 경로를 정의하는 타입 */
 interface RouteType {
@@ -21,17 +22,21 @@ interface RouteType {
 const routes: Record<UserRole, RouteType[]> = {
   Client: [
     { path: "/", component: <Restaurants /> },
-    { path: "/confirm", component: <ConfirmEmail /> },
-    { path: "/edit-profile", component: <EditProfile /> },
     { path: "/search", component: <Search /> },
     { path: "/category/:slug", component: <Category /> },
     { path: "/restaurant/:id", component: <Restaurant /> }
   ],
-  Owner: [{ path: "/", component: <div>owner 페이지</div> }],
+  Owner: [{ path: "/", component: <MyRestaurants /> }],
   Delivery: [{ path: "/", component: <div>delivery 페이지</div> }]
 };
 
-/* 중복된 코드 제거를 위한 헬퍼 함수 */
+/* 공통 컴포넌트 */
+const commonRoutes: RouteType[] = [
+  { path: "/confirm", component: <ConfirmEmail /> },
+  { path: "/edit-profile", component: <EditProfile /> }
+];
+
+/* RouteType 배열을 기반으로 <Route> 컴포넌트를 동적으로 생성 */
 const mapRoutes = (routes: RouteType[]) =>
   routes.map((route: any) => (
     <Route exact key={route.path} path={route.path}>
@@ -54,6 +59,7 @@ export const LoggedInRouter = () => {
         {me.role === UserRole.Client && mapRoutes(routes.Client)}
         {me.role === UserRole.Owner && mapRoutes(routes.Owner)}
         {me.role === UserRole.Delivery && mapRoutes(routes.Delivery)}
+        {mapRoutes(commonRoutes)}
         <Route path="*">
           <NotFound />
         </Route>
