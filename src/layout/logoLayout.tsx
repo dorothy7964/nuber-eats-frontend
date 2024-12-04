@@ -30,7 +30,7 @@ export const LogoLayout: React.FC<LogoLayoutProps> = ({
 
     <div>
       {question}{" "}
-      <Link to={linkTo} className="text-lime-600 hover:underline">
+      <Link to={linkTo} className="link">
         {linkText}
       </Link>
     </div>

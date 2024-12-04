@@ -70,7 +70,7 @@ export const Search: React.FC = () => {
       {/* 음식점 카테고리 */}
       <FoodSearch />
 
-      <div className="wrapper-list">
+      <div className="container">
         {/* 음식점 검색 리스트 */}
         <div className="grid-list">
           {searchData.searchRestaurant.restaurants.map((restaurant) => (

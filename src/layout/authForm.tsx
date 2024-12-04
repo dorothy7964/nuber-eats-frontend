@@ -24,7 +24,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
   buttonText,
   children
 }) => (
-  <form onSubmit={onSubmit} className="grid gap-3 mt-5 w-full mb-5">
+  <form onSubmit={onSubmit} className="container-input">
     {/* 이메일 */}
     <input
       {...register("email", {

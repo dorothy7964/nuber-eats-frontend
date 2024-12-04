@@ -59,7 +59,7 @@ export const Category = () => {
     return <FullScreenLoader />;
 
   return (
-    <div className="wrapper-list">
+    <div className="container">
       <PageMeta title={`${params.slug} 목록`} />
 
       {/* 음식점 카테고리 */}

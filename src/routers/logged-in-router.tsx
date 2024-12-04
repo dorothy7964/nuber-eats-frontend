@@ -11,6 +11,7 @@ import { Search } from "../pages/client/search";
 import { ConfirmEmail } from "../pages/user/confirm-email";
 import { EditProfile } from "../pages/user/edit-profile";
 import { MyRestaurants } from "../pages/owner/my-restaurants";
+import { AddRestaurant } from "../pages/owner/add-restaurants";
 
 /* 각 역할별 경로를 정의하는 타입 */
 interface RouteType {
@@ -26,7 +27,13 @@ const routes: Record<UserRole, RouteType[]> = {
     { path: "/category/:slug", component: <Category /> },
     { path: "/restaurant/:id", component: <Restaurant /> }
   ],
-  Owner: [{ path: "/", component: <MyRestaurants /> }],
+  Owner: [
+    {
+      path: "/",
+      component: <MyRestaurants />
+    },
+    { path: "/add-restaurant", component: <AddRestaurant /> }
+  ],
   Delivery: [{ path: "/", component: <div>delivery 페이지</div> }]
 };
 

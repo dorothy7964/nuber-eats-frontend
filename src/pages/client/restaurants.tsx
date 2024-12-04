@@ -50,7 +50,7 @@ export const Restaurants: React.FC = () => {
       <FoodSearch />
 
       {!loading && (
-        <div className="wrapper-list">
+        <div className="container">
           {/* 음식점 카테고리 */}
           <CategoryList />
 
