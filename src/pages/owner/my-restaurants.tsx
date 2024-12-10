@@ -1,12 +1,12 @@
 import { gql, useQuery } from "@apollo/client";
-import { RESTAURANT_FRAGMENT } from "../../fragments";
 import {
   MyRestaurantsQuery,
   MyRestaurantsQueryVariables
 } from "../../__generated__/types";
-import { PageMeta } from "../../components/pageMeta ";
-import { Link } from "react-router-dom";
 import { NoRestaurants } from "../../components/noRestaurants";
+import { PageMeta } from "../../components/pageMeta ";
+import { Restaurant } from "../../components/restaurant";
+import { RESTAURANT_FRAGMENT } from "../../fragments";
 
 export const MY_RESTAURANTS_QUERY = gql`
   query myRestaurants {
@@ -21,7 +21,7 @@ export const MY_RESTAURANTS_QUERY = gql`
   ${RESTAURANT_FRAGMENT}
 `;
 
-export const MyRestaurants = () => {
+export const MyRestaurants: React.FC = () => {
   const { data: myRestaurantsData } = useQuery<
     MyRestaurantsQuery,
     MyRestaurantsQueryVariables
@@ -44,6 +44,19 @@ export const MyRestaurants = () => {
           linkAddress="/add-restaurant"
         />
       )}
+
+      {/* 음식점 리스트 */}
+      <div className="grid-list">
+        {myRestaurantsData?.myRestaurants.restaurants?.map((restaurant) => (
+          <Restaurant
+            key={restaurant.id}
+            id={restaurant.id + ""}
+            coverImg={restaurant.coverImg}
+            name={restaurant.name}
+            categoryName={restaurant.category?.name}
+          />
+        ))}
+      </div>
     </div>
   );
 };

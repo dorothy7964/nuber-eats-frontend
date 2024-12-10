@@ -32,9 +32,10 @@ export const AddRestaurant = () => {
 
   const onCompleted = (data: CreateRestaurantMutation) => {
     const {
-      createRestaurant: { ok }
+      createRestaurant: { ok, restaurantId }
     } = data;
     if (ok) {
+      console.log("📢 [add-restaurants.tsx:38]", restaurantId);
       setUploading(false); // 업로드 완료 시 버튼 로딩 중 표시 끝
       history.push("/");
     }
