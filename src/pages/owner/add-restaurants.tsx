@@ -1,4 +1,4 @@
-import { gql, useMutation } from "@apollo/client";
+import { gql, useApolloClient, useMutation } from "@apollo/client";
 import {
   CreateRestaurantMutation,
   CreateRestaurantMutationVariables
@@ -9,6 +9,7 @@ import { Button } from "../../components/button";
 import { FormError } from "../../components/form-error";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
+import { MY_RESTAURANTS_QUERY } from "./my-restaurants";
 
 const CREATE_RESTAURANT_MUTATION = gql`
   mutation createRestaurant($input: CreateRestaurantInput!) {
@@ -28,15 +29,47 @@ interface IFormProps {
 }
 
 export const AddRestaurant = () => {
+  const client = useApolloClient(); // hook을 사용해 client를 쓰기
   const history = useHistory();
+  const [imageUrl, setImageUrl] = useState(""); // 이미지 업로드 했을 때의 URL
 
   const onCompleted = (data: CreateRestaurantMutation) => {
     const {
       createRestaurant: { ok, restaurantId }
     } = data;
     if (ok) {
-      console.log("📢 [add-restaurants.tsx:38]", restaurantId);
       setUploading(false); // 업로드 완료 시 버튼 로딩 중 표시 끝
+
+      const { name, address, categoryName } = getValues();
+
+      // cache의 현재 state 읽기
+      const queryResult = client.readQuery({ query: MY_RESTAURANTS_QUERY });
+
+      // query 업데이트하기
+      client.writeQuery({
+        query: MY_RESTAURANTS_QUERY,
+        data: {
+          myRestaurants: {
+            ...queryResult.myRestaurants, // cache에 기존 데이터
+            restaurants: [
+              {
+                __typename: "Restaurant",
+                id: restaurantId,
+                name,
+                coverImg: imageUrl,
+                category: {
+                  __typename: "Category",
+                  name: categoryName
+                },
+                address,
+                isPromoted: false
+              }, // 새로운 데이터 업데이트
+              ...queryResult.myRestaurants.restaurants // cache에 기존 데이터
+            ]
+          }
+        }
+      });
+
       history.push("/");
     }
   };
@@ -75,6 +108,7 @@ export const AddRestaurant = () => {
           body: formBody
         })
       ).json();
+      setImageUrl(coverImg);
 
       // GraphQL mutation을 실행하여 새로운 레스토랑 생성
       createRestaurantMutation({
