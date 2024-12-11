@@ -66,13 +66,13 @@ export const MyRestaurant: React.FC = () => {
         {/* 버튼 */}
         <ButtonLink
           className="mr-8"
-          text="Add Dish"
+          text="요리 추가"
           bgColor="bg-gray-700"
           isArrowVisible={true}
-          toLink=""
+          toLink={`/restaurants/${restaurantId}/add-dish`}
         />
         <ButtonLink
-          text="Buy Promotion"
+          text="홍보 구매"
           bgColor="bg-lime-600"
           isArrowVisible={true}
           toLink=""
@@ -80,13 +80,7 @@ export const MyRestaurant: React.FC = () => {
 
         {/* 메뉴 리스트 */}
         <div className="mt-20">
-          {noMenu && (
-            <NoRestaurants
-              title="요리를 업로드해 주세요!"
-              linkTitle="요리 업로드 하기"
-              linkAddress={`/restaurants/${restaurantId}/add-dish`}
-            />
-          )}
+          {noMenu && <h4 className="text-xl mb-5">요리를 업로드해 주세요!</h4>}
         </div>
       </div>
     </>
