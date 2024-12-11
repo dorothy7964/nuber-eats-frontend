@@ -673,6 +673,13 @@ export type CreateRestaurantMutationVariables = Exact<{
 
 export type CreateRestaurantMutation = { __typename?: 'Mutation', createRestaurant: { __typename?: 'CreateRestaurantOutput', ok: boolean, error?: string | null, restaurantId: number } };
 
+export type MyRestaurantQueryVariables = Exact<{
+  input: MyRestaurantInput;
+}>;
+
+
+export type MyRestaurantQuery = { __typename?: 'Query', myRestaurant: { __typename?: 'MyRestaurantOutput', ok: boolean, error?: string | null, restaurant?: { __typename?: 'Restaurant', id: number, name: string, coverImg: string, address: string, isPromoted: boolean, category?: { __typename?: 'Category', id: number, name: string, coverImg?: string | null, slug: string, restaurantCount: number } | null } | null } };
+
 export type MyRestaurantsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1103,6 +1110,50 @@ export function useCreateRestaurantMutation(baseOptions?: Apollo.MutationHookOpt
 export type CreateRestaurantMutationHookResult = ReturnType<typeof useCreateRestaurantMutation>;
 export type CreateRestaurantMutationResult = Apollo.MutationResult<CreateRestaurantMutation>;
 export type CreateRestaurantMutationOptions = Apollo.BaseMutationOptions<CreateRestaurantMutation, CreateRestaurantMutationVariables>;
+export const MyRestaurantDocument = gql`
+    query myRestaurant($input: MyRestaurantInput!) {
+  myRestaurant(input: $input) {
+    ok
+    error
+    restaurant {
+      ...RestaurantParts
+    }
+  }
+}
+    ${RestaurantPartsFragmentDoc}`;
+
+/**
+ * __useMyRestaurantQuery__
+ *
+ * To run a query within a React component, call `useMyRestaurantQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyRestaurantQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyRestaurantQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useMyRestaurantQuery(baseOptions: Apollo.QueryHookOptions<MyRestaurantQuery, MyRestaurantQueryVariables> & ({ variables: MyRestaurantQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MyRestaurantQuery, MyRestaurantQueryVariables>(MyRestaurantDocument, options);
+      }
+export function useMyRestaurantLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyRestaurantQuery, MyRestaurantQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MyRestaurantQuery, MyRestaurantQueryVariables>(MyRestaurantDocument, options);
+        }
+export function useMyRestaurantSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<MyRestaurantQuery, MyRestaurantQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<MyRestaurantQuery, MyRestaurantQueryVariables>(MyRestaurantDocument, options);
+        }
+export type MyRestaurantQueryHookResult = ReturnType<typeof useMyRestaurantQuery>;
+export type MyRestaurantLazyQueryHookResult = ReturnType<typeof useMyRestaurantLazyQuery>;
+export type MyRestaurantSuspenseQueryHookResult = ReturnType<typeof useMyRestaurantSuspenseQuery>;
+export type MyRestaurantQueryResult = Apollo.QueryResult<MyRestaurantQuery, MyRestaurantQueryVariables>;
 export const MyRestaurantsDocument = gql`
     query myRestaurants {
   myRestaurants {

@@ -12,6 +12,7 @@ import { ConfirmEmail } from "../pages/user/confirm-email";
 import { EditProfile } from "../pages/user/edit-profile";
 import { MyRestaurants } from "../pages/owner/my-restaurants";
 import { AddRestaurant } from "../pages/owner/add-restaurants";
+import { MyRestaurant } from "../pages/owner/my-restaurant";
 
 /* 각 역할별 경로를 정의하는 타입 */
 interface RouteType {
@@ -32,7 +33,8 @@ const routes: Record<UserRole, RouteType[]> = {
       path: "/",
       component: <MyRestaurants />
     },
-    { path: "/add-restaurant", component: <AddRestaurant /> }
+    { path: "/add-restaurant", component: <AddRestaurant /> },
+    { path: "/restaurant/:id", component: <MyRestaurant /> }
   ],
   Delivery: [{ path: "/", component: <div>delivery 페이지</div> }]
 };
