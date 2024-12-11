@@ -6,19 +6,24 @@ import {
 } from "../../__generated__/types";
 import { ButtonLink } from "../../components/buttonLink";
 import { PageMeta } from "../../components/pageMeta ";
-import { RESTAURANT_FRAGMENT } from "../../fragments";
+import { DISH_FRAGMENT, RESTAURANT_FRAGMENT } from "../../fragments";
+import { NoRestaurants } from "../../components/noRestaurants";
 
-const MY_RESTAURANT_QUERY = gql`
+export const MY_RESTAURANT_QUERY = gql`
   query myRestaurant($input: MyRestaurantInput!) {
     myRestaurant(input: $input) {
       ok
       error
       restaurant {
         ...RestaurantParts
+        menu {
+          ...DishParts
+        }
       }
     }
   }
   ${RESTAURANT_FRAGMENT}
+  ${DISH_FRAGMENT}
 `;
 
 interface IParams {
@@ -26,7 +31,7 @@ interface IParams {
 }
 
 export const MyRestaurant: React.FC = () => {
-  const { id } = useParams<IParams>();
+  const { id: restaurantId } = useParams<IParams>();
 
   const { data: myRestaurantData } = useQuery<
     MyRestaurantQuery,
@@ -34,10 +39,12 @@ export const MyRestaurant: React.FC = () => {
   >(MY_RESTAURANT_QUERY, {
     variables: {
       input: {
-        id: +id
+        id: +restaurantId
       }
     }
   });
+
+  const noMenu = myRestaurantData?.myRestaurant.restaurant?.menu.length === 0;
 
   return (
     <>
@@ -70,6 +77,17 @@ export const MyRestaurant: React.FC = () => {
           isArrowVisible={true}
           toLink=""
         />
+
+        {/* 메뉴 리스트 */}
+        <div className="mt-20">
+          {noMenu && (
+            <NoRestaurants
+              title="요리를 업로드해 주세요!"
+              linkTitle="요리 업로드 하기"
+              linkAddress={`/restaurants/${restaurantId}/add-dish`}
+            />
+          )}
+        </div>
       </div>
     </>
   );

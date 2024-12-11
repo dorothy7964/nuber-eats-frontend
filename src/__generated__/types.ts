@@ -619,6 +619,10 @@ export type CategoryPartsFragment = { __typename?: 'Category', id: number, name:
 
 export type RestaurantPartsFragment = { __typename?: 'Restaurant', id: number, name: string, coverImg: string, address: string, isPromoted: boolean, category?: { __typename?: 'Category', id: number, name: string, coverImg?: string | null, slug: string, restaurantCount: number } | null };
 
+export type DishPartsFragment = { __typename?: 'Dish', id: number, name: string, price: number, photo?: string | null, description: string, options?: Array<{ __typename?: 'DishOption', name: string, extra?: number | null, choices?: Array<{ __typename?: 'DishChoice', name: string, extra?: number | null }> | null }> | null };
+
+export type OrderPartsFragment = { __typename?: 'Order', id: number, total?: number | null };
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -678,7 +682,7 @@ export type MyRestaurantQueryVariables = Exact<{
 }>;
 
 
-export type MyRestaurantQuery = { __typename?: 'Query', myRestaurant: { __typename?: 'MyRestaurantOutput', ok: boolean, error?: string | null, restaurant?: { __typename?: 'Restaurant', id: number, name: string, coverImg: string, address: string, isPromoted: boolean, category?: { __typename?: 'Category', id: number, name: string, coverImg?: string | null, slug: string, restaurantCount: number } | null } | null } };
+export type MyRestaurantQuery = { __typename?: 'Query', myRestaurant: { __typename?: 'MyRestaurantOutput', ok: boolean, error?: string | null, restaurant?: { __typename?: 'Restaurant', id: number, name: string, coverImg: string, address: string, isPromoted: boolean, menu: Array<{ __typename?: 'Dish', id: number, name: string, price: number, photo?: string | null, description: string, options?: Array<{ __typename?: 'DishOption', name: string, extra?: number | null, choices?: Array<{ __typename?: 'DishChoice', name: string, extra?: number | null }> | null }> | null }>, category?: { __typename?: 'Category', id: number, name: string, coverImg?: string | null, slug: string, restaurantCount: number } | null } | null } };
 
 export type MyRestaurantsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -724,6 +728,29 @@ export const RestaurantPartsFragmentDoc = gql`
   isPromoted
 }
     ${CategoryPartsFragmentDoc}`;
+export const DishPartsFragmentDoc = gql`
+    fragment DishParts on Dish {
+  id
+  name
+  price
+  photo
+  description
+  options {
+    name
+    extra
+    choices {
+      name
+      extra
+    }
+  }
+}
+    `;
+export const OrderPartsFragmentDoc = gql`
+    fragment OrderParts on Order {
+  id
+  total
+}
+    `;
 export const VerifiedUserFragmentDoc = gql`
     fragment VerifiedUser on User {
   verified
@@ -1117,10 +1144,14 @@ export const MyRestaurantDocument = gql`
     error
     restaurant {
       ...RestaurantParts
+      menu {
+        ...DishParts
+      }
     }
   }
 }
-    ${RestaurantPartsFragmentDoc}`;
+    ${RestaurantPartsFragmentDoc}
+${DishPartsFragmentDoc}`;
 
 /**
  * __useMyRestaurantQuery__
