@@ -14,7 +14,11 @@
 }
 
 .input {
-  @apply focus:outline-none focus:border-gray-500 p-3 border-2  text-lg border-gray-200 transition-colors;
+  @apply focus:outline-none focus:border-gray-500 p-3 border-2 text-lg border-gray-200 transition-colors;
+}
+
+.input-sm {
+  @apply focus:outline-none focus:border-gray-500 p-3 border-2 border-gray-200 transition-colors py-3 px-4;
 }
 
 .link {

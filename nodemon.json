@@ -1,5 +1,5 @@
 {
-  "watch": ["src/styles/tailwind.css"],
+  "watch": ["src"],
   "ext": "css",
   "exec": "npm run tailwind:build"
 }
