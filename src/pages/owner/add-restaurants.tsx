@@ -32,7 +32,9 @@ interface IFormProps {
 export const AddRestaurant = () => {
   const client = useApolloClient(); // hook을 사용해 client를 쓰기
   const history = useHistory();
+
   const [imageUrl, setImageUrl] = useState(""); // 이미지 업로드 했을 때의 URL
+  const [uploading, setUploading] = useState(false); // 이미지 업로드를 시작한 순간 부터 Mutation이 끝날 때까지 로딩 중이라 표시
 
   const onCompleted = (data: CreateRestaurantMutation) => {
     const {
@@ -70,7 +72,7 @@ export const AddRestaurant = () => {
         }
       });
 
-      history.push("/");
+      history.push("/"); // 성공 시 페이지 이동
     }
   };
 
@@ -87,9 +89,6 @@ export const AddRestaurant = () => {
   } = useForm<IFormProps>({
     mode: "onChange"
   });
-
-  // 버튼은 이미지 업로드를 시작한 순간 부터 Mutation이 끝날 때까지 로딩 중이라 표시 된다.
-  const [uploading, setUploading] = useState(false);
 
   const onSubmit = async () => {
     setUploading(true); // 이미지 업로드 시작 순간 부터 버튼은 로딩 표시
