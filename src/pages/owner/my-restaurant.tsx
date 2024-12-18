@@ -8,6 +8,7 @@ import { ButtonLink } from "../../components/buttonLink";
 import { PageMeta } from "../../components/pageMeta ";
 import { DISH_FRAGMENT, RESTAURANT_FRAGMENT } from "../../fragments";
 import { NoRestaurants } from "../../components/noRestaurants";
+import { Dish } from "../../components/dish";
 
 export const MY_RESTAURANT_QUERY = gql`
   query myRestaurant($input: MyRestaurantInput!) {
@@ -81,6 +82,17 @@ export const MyRestaurant: React.FC = () => {
         {/* 메뉴 리스트 */}
         <div className="mt-20">
           {noMenu && <h4 className="text-xl mb-5">요리를 업로드해 주세요!</h4>}
+
+          <div className="grid-list">
+            {myRestaurantData?.myRestaurant.restaurant?.menu.map((dish) => (
+              <Dish
+                name={dish.name}
+                price={dish.price}
+                photo={dish.photo || ""}
+                description={dish.description}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </>
