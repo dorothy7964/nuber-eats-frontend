@@ -10,6 +10,7 @@ import { FormError } from "../../components/form-error";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { MY_RESTAURANTS_QUERY } from "./my-restaurants";
+import { ButtonUploadFile } from "../../components/buttonUploadFile";
 
 const CREATE_RESTAURANT_MUTATION = gql`
   mutation createRestaurant($input: CreateRestaurantInput!) {
@@ -39,7 +40,6 @@ export const AddRestaurant = () => {
     } = data;
     if (ok) {
       setUploading(false); // 업로드 완료 시 버튼 로딩 중 표시 끝
-
       const { name, address, categoryName } = getValues();
 
       // cache의 현재 state 읽기
@@ -126,11 +126,36 @@ export const AddRestaurant = () => {
     }
   };
 
+  // 파일 선택 시 미리보기 URL을 생성하여 상태에 저장
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader(); // 선택한 파일을 읽기
+      reader.onloadend = () => {
+        setImageUrl(reader.result as string); // 미리보기 이미지 URL 저장
+      };
+      reader.readAsDataURL(file); // 파일을 읽어 미리보기 URL 생성
+    }
+  };
+
   return (
-    <div className="container flex flex-col items-center mt-52">
+    <div
+      className={`container flex flex-col items-center ${
+        imageUrl ? "mt-10" : "mt-52"
+      }`}
+    >
       <PageMeta title="레스토랑 생성" />
 
       <h4 className="font-semibold text-2xl mb-3">레스토랑 추가하기</h4>
+
+      {/* 이미지 미리보기 */}
+      {imageUrl && (
+        <img
+          src={imageUrl}
+          alt="Preview"
+          className="max-w-screen-sm bg-cover rounded"
+        />
+      )}
 
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -169,17 +194,25 @@ export const AddRestaurant = () => {
         {errors.categoryName?.message && (
           <FormError errorMessage={errors.categoryName?.message} />
         )}
-        <input
-          {...register("file", {
-            required: "커버 이미지 파일을 선택해 주세요."
-          })}
-          type="file"
-          accept="image/*" // 이미지 유형의 모든 확장자 파일 가능
-          placeholder="파일"
-        />
-        {errors.file?.message && (
-          <FormError errorMessage={errors.file?.message} />
-        )}
+        <div className="relative">
+          <input
+            {...register("file", {
+              required: "커버 이미지 파일을 선택해 주세요."
+            })}
+            type="file"
+            accept="image/*" // 이미지 유형의 모든 확장자 파일 가능
+            placeholder="파일"
+            onChange={handleFileChange} // 파일 선택 시 미리보기 처리
+            className={`absolute inset-0 opacity-0 ${
+              uploading ? "pointer-events-none" : "cursor-pointer"
+            }`}
+          />
+          <ButtonUploadFile
+            isImage={imageUrl !== "" ? true : false}
+            canClick={!uploading}
+            actionText="[필수] 레스토랑 이미지 업로드"
+          />
+        </div>
         <Button
           loading={uploading}
           canClick={isValid}
