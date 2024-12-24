@@ -1,6 +1,14 @@
 import { gql, useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
-import { VictoryPie } from "victory";
+import {
+  VictoryAxis,
+  VictoryChart,
+  VictoryLabel,
+  VictoryLine,
+  VictoryTheme,
+  VictoryTooltip,
+  VictoryVoronoiContainer
+} from "victory";
 import {
   MyRestaurantQuery,
   MyRestaurantQueryVariables
@@ -8,7 +16,11 @@ import {
 import { ButtonLink } from "../../components/buttonLink";
 import { Dish } from "../../components/dish";
 import { PageMeta } from "../../components/pageMeta ";
-import { DISH_FRAGMENT, RESTAURANT_FRAGMENT } from "../../fragments";
+import {
+  DISH_FRAGMENT,
+  ORDERS_FRAGMENT,
+  RESTAURANT_FRAGMENT
+} from "../../fragments";
 
 export const MY_RESTAURANT_QUERY = gql`
   query myRestaurant($input: MyRestaurantInput!) {
@@ -20,11 +32,15 @@ export const MY_RESTAURANT_QUERY = gql`
         menu {
           ...DishParts
         }
+        orders {
+          ...OrderParts
+        }
       }
     }
   }
   ${RESTAURANT_FRAGMENT}
   ${DISH_FRAGMENT}
+  ${ORDERS_FRAGMENT}
 `;
 
 interface IParams {
@@ -46,20 +62,6 @@ export const MyRestaurant: React.FC = () => {
   });
 
   const noMenu = myRestaurantData?.myRestaurant.restaurant?.menu.length === 0;
-
-  const chartData = [
-    { x: 1, y: 3000 },
-    { x: 2, y: 1500 },
-    { x: 3, y: 4250 },
-    { x: 4, y: 1250 },
-    { x: 5, y: 2300 },
-    { x: 6, y: 7150 },
-    { x: 7, y: 6830 },
-    { x: 8, y: 6830 },
-    { x: 9, y: 6830 },
-    { x: 10, y: 6830 },
-    { x: 11, y: 6830 }
-  ];
 
   return (
     <>
@@ -100,6 +102,7 @@ export const MyRestaurant: React.FC = () => {
           <div className="grid-list">
             {myRestaurantData?.myRestaurant.restaurant?.menu.map((dish) => (
               <Dish
+                key={dish.id}
                 name={dish.name}
                 price={dish.price}
                 photo={dish.photo || ""}
@@ -112,11 +115,45 @@ export const MyRestaurant: React.FC = () => {
         {/* 판매 차트 */}
         <div className="mt-20 mb-10">
           <h4 className="text-center text-2xl font-medium">판매 차트</h4>
-          <div className="max-w-lg w-full mx-auto mt-10">
-            <VictoryPie
-              data={chartData}
-              colorScale={["tomato", "orange", "gold", "cyan", "navy"]}
-            />
+          <div className="mt-10">
+            <VictoryChart
+              height={500}
+              width={window.innerWidth}
+              theme={VictoryTheme.material}
+              containerComponent={<VictoryVoronoiContainer />}
+            >
+              <VictoryLine
+                labels={({ datum }) => `${datum.y}원`}
+                labelComponent={
+                  <VictoryTooltip
+                    style={{ fontSize: 10 } as any}
+                    renderInPortal
+                    dy={-20} // 툴팁을 수직 방향으로 이동
+                  />
+                }
+                data={myRestaurantData?.myRestaurant.restaurant?.orders.map(
+                  (order) => ({ x: order.createAt, y: order.total })
+                )}
+                interpolation="natural" // 선 스타일
+                style={{
+                  data: {
+                    strokeWidth: 1 // 그래프 선 굵기
+                  }
+                }}
+              />
+              <VictoryAxis
+                tickLabelComponent={<VictoryLabel renderInPortal />}
+                style={{
+                  tickLabels: {
+                    fontSize: 5,
+                    fill: "grey"
+                  } as any
+                }}
+                tickFormat={(tick: string) =>
+                  new Date(tick).toLocaleDateString("ko")
+                }
+              />
+            </VictoryChart>
           </div>
         </div>
       </div>

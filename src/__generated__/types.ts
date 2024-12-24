@@ -622,7 +622,7 @@ export type RestaurantPartsFragment = { __typename?: 'Restaurant', id: number, n
 
 export type DishPartsFragment = { __typename?: 'Dish', id: number, name: string, price: number, photo?: string | null, description: string, options?: Array<{ __typename?: 'DishOption', name: string, extra?: number | null, choices?: Array<{ __typename?: 'DishChoice', name: string, extra?: number | null }> | null }> | null };
 
-export type OrderPartsFragment = { __typename?: 'Order', id: number, total?: number | null };
+export type OrderPartsFragment = { __typename?: 'Order', id: number, total?: number | null, createAt: any };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -690,7 +690,7 @@ export type MyRestaurantQueryVariables = Exact<{
 }>;
 
 
-export type MyRestaurantQuery = { __typename?: 'Query', myRestaurant: { __typename?: 'MyRestaurantOutput', ok: boolean, error?: string | null, restaurant?: { __typename?: 'Restaurant', id: number, name: string, coverImg: string, address: string, isPromoted: boolean, menu: Array<{ __typename?: 'Dish', id: number, name: string, price: number, photo?: string | null, description: string, options?: Array<{ __typename?: 'DishOption', name: string, extra?: number | null, choices?: Array<{ __typename?: 'DishChoice', name: string, extra?: number | null }> | null }> | null }>, category?: { __typename?: 'Category', id: number, name: string, coverImg?: string | null, slug: string, restaurantCount: number } | null } | null } };
+export type MyRestaurantQuery = { __typename?: 'Query', myRestaurant: { __typename?: 'MyRestaurantOutput', ok: boolean, error?: string | null, restaurant?: { __typename?: 'Restaurant', id: number, name: string, coverImg: string, address: string, isPromoted: boolean, menu: Array<{ __typename?: 'Dish', id: number, name: string, price: number, photo?: string | null, description: string, options?: Array<{ __typename?: 'DishOption', name: string, extra?: number | null, choices?: Array<{ __typename?: 'DishChoice', name: string, extra?: number | null }> | null }> | null }>, orders: Array<{ __typename?: 'Order', id: number, total?: number | null, createAt: any }>, category?: { __typename?: 'Category', id: number, name: string, coverImg?: string | null, slug: string, restaurantCount: number } | null } | null } };
 
 export type MyRestaurantsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -757,6 +757,7 @@ export const OrderPartsFragmentDoc = gql`
     fragment OrderParts on Order {
   id
   total
+  createAt
 }
     `;
 export const VerifiedUserFragmentDoc = gql`
@@ -1189,11 +1190,15 @@ export const MyRestaurantDocument = gql`
       menu {
         ...DishParts
       }
+      orders {
+        ...OrderParts
+      }
     }
   }
 }
     ${RestaurantPartsFragmentDoc}
-${DishPartsFragmentDoc}`;
+${DishPartsFragmentDoc}
+${OrderPartsFragmentDoc}`;
 
 /**
  * __useMyRestaurantQuery__
