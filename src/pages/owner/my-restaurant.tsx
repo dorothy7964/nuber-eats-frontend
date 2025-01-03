@@ -62,6 +62,8 @@ export const MyRestaurant: React.FC = () => {
   });
 
   const noMenu = myRestaurantData?.myRestaurant.restaurant?.menu.length === 0;
+  const noOrder =
+    myRestaurantData?.myRestaurant.restaurant?.orders.length === 0;
 
   return (
     <>
@@ -116,44 +118,51 @@ export const MyRestaurant: React.FC = () => {
         <div className="mt-20 mb-10">
           <h4 className="text-center text-2xl font-medium">판매 차트</h4>
           <div className="mt-10">
-            <VictoryChart
-              height={500}
-              width={window.innerWidth}
-              theme={VictoryTheme.material}
-              containerComponent={<VictoryVoronoiContainer />}
-            >
-              <VictoryLine
-                labels={({ datum }) => `${datum.y}원`}
-                labelComponent={
-                  <VictoryTooltip
-                    style={{ fontSize: 10 } as any}
-                    renderInPortal
-                    dy={-20} // 툴팁을 수직 방향으로 이동
-                  />
-                }
-                data={myRestaurantData?.myRestaurant.restaurant?.orders.map(
-                  (order) => ({ x: order.createAt, y: order.total })
-                )}
-                interpolation="natural" // 선 스타일
-                style={{
-                  data: {
-                    strokeWidth: 1 // 그래프 선 굵기
+            {noOrder ? (
+              <div className="text-center text-gray-500">주문이 없습니다.</div>
+            ) : (
+              <VictoryChart
+                height={500}
+                width={window.innerWidth}
+                theme={VictoryTheme.material}
+                containerComponent={<VictoryVoronoiContainer />}
+              >
+                <VictoryLine
+                  labels={({ datum }) => `${datum.y}원`}
+                  labelComponent={
+                    <VictoryTooltip
+                      style={{ fontSize: 15 } as any}
+                      renderInPortal
+                      dy={-20} // 툴팁을 수직 방향으로 이동
+                    />
                   }
-                }}
-              />
-              <VictoryAxis
-                tickLabelComponent={<VictoryLabel renderInPortal />}
-                style={{
-                  tickLabels: {
-                    fontSize: 5,
-                    fill: "grey"
-                  } as any
-                }}
-                tickFormat={(tick: string) =>
-                  new Date(tick).toLocaleDateString("ko")
-                }
-              />
-            </VictoryChart>
+                  data={myRestaurantData?.myRestaurant.restaurant?.orders.map(
+                    (order) => ({
+                      x: order.createAt,
+                      y: order.total || 0 // 기본값: 0원
+                    })
+                  )}
+                  interpolation="natural" // 선 스타일
+                  style={{
+                    data: {
+                      strokeWidth: 5 // 그래프 선 굵기
+                    }
+                  }}
+                />
+                <VictoryAxis
+                  tickLabelComponent={<VictoryLabel renderInPortal />}
+                  style={{
+                    tickLabels: {
+                      fontSize: 20,
+                      fill: "grey"
+                    } as any
+                  }}
+                  tickFormat={(tick: string) =>
+                    new Date(tick).toLocaleDateString("ko")
+                  }
+                />
+              </VictoryChart>
+            )}
           </div>
         </div>
       </div>
