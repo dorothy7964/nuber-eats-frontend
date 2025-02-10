@@ -14,6 +14,7 @@ import {
   MyRestaurantQueryVariables
 } from "../../__generated__/types";
 import { ButtonLink } from "../../components/buttonLink";
+import { ButtonSpan } from "../../components/buttonSpan";
 import { Dish } from "../../components/dish";
 import { PageMeta } from "../../components/pageMeta ";
 import {
@@ -21,6 +22,7 @@ import {
   ORDERS_FRAGMENT,
   RESTAURANT_FRAGMENT
 } from "../../fragments";
+import { useMe } from "../../hooks/useMe";
 
 export const MY_RESTAURANT_QUERY = gql`
   query myRestaurant($input: MyRestaurantInput!) {
@@ -65,9 +67,23 @@ export const MyRestaurant: React.FC = () => {
   const noOrder =
     myRestaurantData?.myRestaurant.restaurant?.orders.length === 0;
 
+  const { data: userData } = useMe();
+
+  const triggerPaddle = async () => {
+    if (userData?.me.email) {
+      // @ts-ignore
+      window.Paddle.Setup({ vendor: 216484 });
+      // @ts-ignore
+      window.Paddle.Checkout.open({
+        product: "pro_01jkaq87gmsf1yvqc4yfvrt13x",
+        email: userData?.me.email
+      });
+    }
+  };
+
   return (
     <>
-      <PageMeta title="사장님의 레스토랑" />
+      <PageMeta title="사장님의 레스토랑" isPaddle={true} />
 
       {/* 커버 이미지 */}
       <div
@@ -90,11 +106,11 @@ export const MyRestaurant: React.FC = () => {
           isArrowVisible={true}
           toLink={`/restaurants/${restaurantId}/add-dish`}
         />
-        <ButtonLink
+        <ButtonSpan
           text="홍보 구매"
           bgColor="bg-lime-600"
           isArrowVisible={true}
-          toLink=""
+          onClick={triggerPaddle}
         />
 
         {/* 메뉴 리스트 */}
