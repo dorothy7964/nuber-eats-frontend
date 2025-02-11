@@ -15,13 +15,12 @@ export const RESTAURANT_FRAGMENT = gql`
     id
     name
     coverImg
-    category {
-      ...CategoryParts
-    }
     address
+    category {
+      name
+    }
     isPromoted
   }
-  ${CATEGORY_FRAGMENT}
 `;
 
 export const DISH_FRAGMENT = gql`

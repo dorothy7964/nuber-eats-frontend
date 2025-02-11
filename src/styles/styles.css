@@ -582,6 +582,7 @@ video {
 .container {
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 2.5rem;
   max-width: 1536px;
 }
 
@@ -731,6 +732,11 @@ video {
   inset: 0px;
 }
 
+.mx-5 {
+  margin-left: 1.25rem;
+  margin-right: 1.25rem;
+}
+
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -763,6 +769,10 @@ video {
 
 .ml-3 {
   margin-left: 0.75rem;
+}
+
+.mr-2 {
+  margin-right: 0.5rem;
 }
 
 .mr-3 {
@@ -799,6 +809,10 @@ video {
 
 .mt-52 {
   margin-top: 13rem;
+}
+
+.mt-8 {
+  margin-top: 2rem;
 }
 
 .flex {
@@ -1145,6 +1159,10 @@ video {
 
 .opacity-50 {
   opacity: 0.5;
+}
+
+.opacity-75 {
+  opacity: 0.75;
 }
 
 .filter {
