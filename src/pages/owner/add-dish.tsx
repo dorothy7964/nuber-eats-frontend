@@ -241,7 +241,7 @@ export const AddDish: React.FC = () => {
           <h4 className="font-semibold text-xl mb-3">요리 옵션</h4>
           <span
             onClick={onAddOptionClick}
-            className=" cursor-pointer text-white bg-gray-900 py-1 px-2 mt-5"
+            className="cursor-pointer text-white bg-gray-900 py-1 px-2 mt-5"
           >
             요리 옵션 추가
           </span>

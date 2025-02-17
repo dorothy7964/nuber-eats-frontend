@@ -1,5 +1,5 @@
 import { gql, useQuery } from "@apollo/client";
-import React from "react";
+import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
   CATEGORY_FRAGMENT,
@@ -9,11 +9,13 @@ import {
 
 import { FullScreenLoader } from "../../components/fullScreenLoader";
 import {
+  CreateOrderItemInput,
   RestaurantQuery,
   RestaurantQueryVariables
 } from "../../__generated__/types";
 import { PageMeta } from "../../components/pageMeta ";
 import { Dish } from "../../components/dish";
+import { ButtonSpan } from "../../components/buttonSpan";
 
 const RESTAURANT_QUERY = gql`
   query restaurant($input: RestaurantInput!) {
@@ -36,6 +38,15 @@ const RESTAURANT_QUERY = gql`
   ${DISH_FRAGMENT}
 `;
 
+const CREATE_ORDER_MUTATION = gql`
+  mutation createOrder($input: CreateOrderInput!) {
+    createOrder(input: $input) {
+      ok
+      error
+    }
+  }
+`;
+
 interface IRestaurantParams {
   id: string;
 }
@@ -52,6 +63,19 @@ export const Restaurant: React.FC = () => {
       }
     }
   });
+
+  const [orderStarted, setOrderStarted] = useState(false); // 주문하기 버튼 클릭 여부
+  const [orderItems, setOrderItems] = useState<CreateOrderItemInput[]>([]); // 선택한 메뉴
+
+  const triggerStartOrder = () => {
+    setOrderStarted(true);
+  };
+
+  const addItemToOrder = (dishId: number) => {
+    setOrderItems((current) => [{ dishId, options: [] }, ...current]);
+  };
+
+  console.log("📢 [restaurant.tsx:79]", orderItems);
 
   if (loading || !restaurantData || !restaurantData?.restaurant.restaurant)
     return <FullScreenLoader />;
@@ -84,8 +108,18 @@ export const Restaurant: React.FC = () => {
         </div>
       </div>
 
-      {/* 메뉴 리스트 */}
       <div className="container mt-20">
+        {/* 주문하기 버튼 */}
+        <div className="flex flex-col items-end">
+          <ButtonSpan
+            text="주문하기"
+            bgColor="bg-lime-600"
+            isArrowVisible={false}
+            onClick={triggerStartOrder}
+          />
+        </div>
+
+        {/* 메뉴 리스트 */}
         <div className="grid-list">
           {noMenu && (
             <h4 className="text-xl mx-5 text-gray-500">
@@ -95,12 +129,15 @@ export const Restaurant: React.FC = () => {
           {restaurant.menu.map((dish) => (
             <Dish
               key={dish.id}
+              id={dish.id}
               name={dish.name}
               price={dish.price}
               photo={dish.photo || ""}
               description={dish.description}
               isCustomer={true}
               options={dish.options}
+              orderStarted={orderStarted}
+              addItemToOrder={addItemToOrder}
             />
           ))}
         </div>
