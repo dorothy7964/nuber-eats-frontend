@@ -66,16 +66,29 @@ export const Restaurant: React.FC = () => {
 
   const [orderStarted, setOrderStarted] = useState(false); // 주문하기 버튼 클릭 여부
   const [orderItems, setOrderItems] = useState<CreateOrderItemInput[]>([]); // 선택한 메뉴
+  //! console
+  console.log("📢 [restaurant.tsx:orderItems]", orderItems);
 
   const triggerStartOrder = () => {
     setOrderStarted(true);
   };
 
+  // 주문 담기 리스트에 선택한 메뉴 찾기
+  const getOrderItem = (dishId: number) => {
+    return orderItems.find((order) => {
+      return order.dishId === dishId;
+    });
+  };
+
+  // 주문 담기 리스트에 선택한 메뉴 존재 여부 체크
+  const isMenuSelected = (dishId: number) => {
+    return Boolean(getOrderItem(dishId));
+  };
+
+  // 주문 담기 리스트
   const addItemToOrder = (dishId: number) => {
     setOrderItems((current) => [{ dishId, options: [] }, ...current]);
   };
-
-  console.log("📢 [restaurant.tsx:79]", orderItems);
 
   if (loading || !restaurantData || !restaurantData?.restaurant.restaurant)
     return <FullScreenLoader />;
@@ -112,8 +125,9 @@ export const Restaurant: React.FC = () => {
         {/* 주문하기 버튼 */}
         <div className="flex flex-col items-end">
           <ButtonSpan
-            text="주문하기"
-            bgColor="bg-lime-600"
+            className={orderStarted ? "cursor-progress" : ""}
+            text={orderStarted ? "주문 중..." : "주문하기"}
+            bgColor={orderStarted ? "bg-gray-300" : "bg-lime-600"}
             isArrowVisible={false}
             onClick={triggerStartOrder}
           />
@@ -137,6 +151,7 @@ export const Restaurant: React.FC = () => {
               isCustomer={true}
               options={dish.options}
               orderStarted={orderStarted}
+              isMenuSelected={isMenuSelected(dish.id)}
               addItemToOrder={addItemToOrder}
             />
           ))}

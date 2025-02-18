@@ -10,6 +10,7 @@ interface IDishProps {
   isCustomer?: boolean;
   options?: DishOption[] | null;
   orderStarted?: boolean;
+  isMenuSelected?: boolean;
   addItemToOrder?: (dishId: number) => void;
 }
 
@@ -22,6 +23,7 @@ export const Dish: React.FC<IDishProps> = ({
   isCustomer = false, // 유저가 고객이면 메뉴의 옵션 노출
   options,
   orderStarted = false, // 오너 화면에서는 주문하기 버튼이 필요없으므로 기본값 false 설정
+  isMenuSelected, // 주문 담기 리스트에 선택한 메뉴 존재 여부 체크
   addItemToOrder = () => {} // 기본 빈 함수 설정
 }) => {
   const formattedNumber = new Intl.NumberFormat("ko-KR", {
@@ -32,11 +34,17 @@ export const Dish: React.FC<IDishProps> = ({
   });
 
   const onClickMenu = (dishId: number) => {
+    if (isMenuSelected) return; // 동일 메뉴는 담지 않음
+
     addItemToOrder(dishId);
   };
 
   return (
-    <div className="flex border cur1sor-pointer hover:border-gray-800 transition-all rounded-md overflow-hidden">
+    <div
+      className={`flex border cur1sor-pointer ${
+        isMenuSelected ? "border-gray-800" : "hover:border-gray-800"
+      } transition-all rounded-md overflow-hidden`}
+    >
       {/* 메뉴 정보 */}
       <div className="flex flex-col flex-1 px-8 py-4">
         <h3 className="text-lg font-medium ">{name}</h3>
@@ -62,9 +70,11 @@ export const Dish: React.FC<IDishProps> = ({
           <div className="mt-auto">
             <span
               onClick={() => onClickMenu(id)}
-              className="cursor-pointer text-white bg-gray-900 py-1 px-2 mt-5"
+              className={`cursor-pointer text-white ${
+                isMenuSelected ? "bg-red-600" : "bg-gray-900"
+              } py-1 px-2 mt-5"`}
             >
-              메뉴 담기
+              {isMenuSelected ? "메뉴 빼기" : "메뉴 담기"}
             </span>
           </div>
         )}
