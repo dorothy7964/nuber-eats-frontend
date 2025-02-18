@@ -911,6 +911,10 @@ video {
   align-items: center;
 }
 
+.justify-end {
+  justify-content: flex-end;
+}
+
 .justify-center {
   justify-content: center;
 }
@@ -951,6 +955,10 @@ video {
   border-top-width: 1px;
 }
 
+.border-r-4 {
+  border-right-width: 4px;
+}
+
 .border-gray-400 {
   --tw-border-opacity: 1;
   border-color: rgb(156 163 175 / var(--tw-border-opacity));
@@ -959,6 +967,20 @@ video {
 .border-gray-800 {
   --tw-border-opacity: 1;
   border-color: rgb(31 41 55 / var(--tw-border-opacity));
+}
+
+.border-lime-800 {
+  --tw-border-opacity: 1;
+  border-color: rgb(63 98 18 / var(--tw-border-opacity));
+}
+
+.border-lime-600 {
+  --tw-border-opacity: 1;
+  border-color: rgb(101 163 13 / var(--tw-border-opacity));
+}
+
+.border-transparent {
+  border-color: transparent;
 }
 
 .bg-black {
@@ -1011,6 +1033,16 @@ video {
   background-color: rgb(220 38 38 / var(--tw-bg-opacity));
 }
 
+.bg-lime-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(236 252 203 / var(--tw-bg-opacity));
+}
+
+.bg-lime-200 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(217 249 157 / var(--tw-bg-opacity));
+}
+
 .bg-cover {
   background-size: cover;
 }
@@ -1021,6 +1053,14 @@ video {
 
 .p-3 {
   padding: 0.75rem;
+}
+
+.p-2 {
+  padding: 0.5rem;
+}
+
+.p-1 {
+  padding: 0.25rem;
 }
 
 .px-2 {
@@ -1187,6 +1227,14 @@ video {
   opacity: 0.75;
 }
 
+.outline-2 {
+  outline-width: 2px;
+}
+
+.outline-offset-2 {
+  outline-offset: 2px;
+}
+
 .filter {
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
@@ -1197,9 +1245,27 @@ video {
   transition-duration: 150ms;
 }
 
+.hover\:rounded:hover {
+  border-radius: 0.25rem;
+}
+
+.hover\:border:hover {
+  border-width: 1px;
+}
+
 .hover\:border-gray-800:hover {
   --tw-border-opacity: 1;
   border-color: rgb(31 41 55 / var(--tw-border-opacity));
+}
+
+.hover\:border-lime-600:hover {
+  --tw-border-opacity: 1;
+  border-color: rgb(101 163 13 / var(--tw-border-opacity));
+}
+
+.hover\:border-red-600:hover {
+  --tw-border-opacity: 1;
+  border-color: rgb(220 38 38 / var(--tw-border-opacity));
 }
 
 .hover\:bg-lime-700:hover {

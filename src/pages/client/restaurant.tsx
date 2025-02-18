@@ -10,6 +10,7 @@ import {
 import { FullScreenLoader } from "../../components/fullScreenLoader";
 import {
   CreateOrderItemInput,
+  OrderItemOptionInputType,
   RestaurantQuery,
   RestaurantQueryVariables
 } from "../../__generated__/types";
@@ -66,6 +67,7 @@ export const Restaurant: React.FC = () => {
 
   const [orderStarted, setOrderStarted] = useState(false); // 주문하기 버튼 클릭 여부
   const [orderItems, setOrderItems] = useState<CreateOrderItemInput[]>([]); // 선택한 메뉴
+
   //! console
   console.log("📢 [restaurant.tsx:orderItems]", orderItems);
 
@@ -73,29 +75,47 @@ export const Restaurant: React.FC = () => {
     setOrderStarted(true);
   };
 
-  // 메뉴뉴 담기 리스트에 선택한 메뉴 찾기
+  // 메뉴 담기 리스트에 선택한 메뉴 찾기
   const getOrderItem = (dishId: number) => {
     return orderItems.find((order) => {
       return order.dishId === dishId;
     });
   };
 
-  // 메뉴뉴 담기 리스트에 선택한 메뉴 존재 여부 체크
+  // 메뉴 담기 리스트에 선택한 메뉴 존재 여부 체크
   const isMenuSelected = (dishId: number) => {
     return Boolean(getOrderItem(dishId));
   };
 
-  // 메뉴뉴 담기
+  // 메뉴 담기
   const addItemToOrder = (dishId: number) => {
-    console.log("📢 [restaurant.tsx: 메뉴담기 실행]");
     setOrderItems((current) => [{ dishId, options: [] }, ...current]);
   };
 
   // 메뉴 빼기
   const removeFromOrder = (dishId: number) => {
     const orderList = orderItems.filter((order) => order.dishId !== dishId);
-    console.log("📢 [restaurant.tsx: 메뉴 빼기 실행]", orderList);
     setOrderItems(orderList);
+  };
+
+  // 메뉴 옵션 추가
+  const addOptionToItem = (dishId: number, option: any) => {
+    const prevOrderItem = getOrderItem(dishId);
+
+    // 이미 담은 메뉴가 있다면 해당 주문 제거 후 옵션 추가해 다시 담기
+    if (prevOrderItem) {
+      removeFromOrder(dishId);
+      setOrderItems((current) => [
+        { dishId, options: [option, ...prevOrderItem.options!] },
+        ...current
+      ]);
+      return;
+    }
+
+    return setOrderItems((current) => [
+      { dishId, options: [option] },
+      ...current
+    ]);
   };
 
   if (loading || !restaurantData || !restaurantData?.restaurant.restaurant)
@@ -162,6 +182,7 @@ export const Restaurant: React.FC = () => {
               isMenuSelected={isMenuSelected(dish.id)}
               addItemToOrder={addItemToOrder}
               removeFromOrder={removeFromOrder}
+              addOptionToItem={addOptionToItem}
             />
           ))}
         </div>

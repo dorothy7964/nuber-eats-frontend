@@ -13,6 +13,7 @@ interface IDishProps {
   isMenuSelected?: boolean;
   addItemToOrder?: (dishId: number) => void;
   removeFromOrder?: (dishId: number) => void;
+  addOptionToItem?: (dishId: number, option: any) => void;
 }
 
 export const Dish: React.FC<IDishProps> = ({
@@ -26,7 +27,8 @@ export const Dish: React.FC<IDishProps> = ({
   orderStarted = false, // 오너 화면에서는 주문하기 버튼이 필요없으므로 기본값 false 설정
   isMenuSelected, // 주문 담기 리스트에 선택한 메뉴 존재 여부 체크
   addItemToOrder = () => {}, // 기본 빈 함수 설정
-  removeFromOrder = () => {} // 기본 빈 함수 설정
+  removeFromOrder = () => {}, // 기본 빈 함수 설정
+  addOptionToItem = () => {} // 기본 빈 함수 설정
 }) => {
   const formattedNumber = new Intl.NumberFormat("ko-KR", {
     style: "currency",
@@ -47,14 +49,18 @@ export const Dish: React.FC<IDishProps> = ({
     }
   };
 
+  const onClickOption = (dishId: number, option: any) => {
+    return addOptionToItem(dishId, option);
+  };
+
   return (
     <div
       className={`flex border cur1sor-pointer ${
-        isMenuSelected ? "border-gray-800" : "hover:border-gray-800"
+        isMenuSelected ? "border-lime-600" : "hover:border-gray-800"
       } transition-all rounded-md overflow-hidden`}
     >
-      {/* 메뉴 정보 */}
       <div className="flex flex-col flex-1 px-8 py-4">
+        {/* 메뉴 정보 */}
         <h3 className="text-lg font-medium ">{name}</h3>
         <h4 className="font-medium text-gray-500">{description}</h4>
         <h5 className="mt-5">{formattedNumber.format(price)}</h5>
@@ -63,7 +69,11 @@ export const Dish: React.FC<IDishProps> = ({
           <div className="mb-5">
             <h5 className="mt-8 mb-3 font-bold">- 요리 옵션 -</h5>
             {options?.map((option, index) => (
-              <span className="flex items-center" key={index}>
+              <span
+                onClick={() => onClickOption(id, { name: option.name })}
+                className="flex items-center p-1 mb-1 cursor-pointer border border-transparent hover:border-lime-600 rounded"
+                key={index}
+              >
                 <h6 className="mr-2">{option.name}</h6>
                 <h6 className="text-sm opacity-75">
                   {formattedNumber.format(Number(option.extra))}
@@ -75,12 +85,12 @@ export const Dish: React.FC<IDishProps> = ({
 
         {/* 메뉴 담기 */}
         {!orderStarted && (
-          <div className="mt-auto">
+          <div className="mt-auto flex justify-end">
             <span
               onClick={() => onClickMenu(id)}
               className={`cursor-pointer text-white ${
                 isMenuSelected ? "bg-red-600" : "bg-gray-900"
-              } py-1 px-2 mt-5"`}
+              } py-1 px-2 mt-5`}
             >
               {isMenuSelected ? "메뉴 빼기" : "메뉴 담기"}
             </span>
