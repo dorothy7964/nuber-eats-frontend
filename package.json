@@ -33,6 +33,9 @@
   "scripts": {
     "tailwind:build": "tailwindcss -i ./src/styles/tailwind.css -o ./src/styles/styles.css --watch",
     "start": "cross-env BROWSER=none concurrently \"nodemon --watch src --exec react-scripts start\" \"npm run tailwind:build\"",
+    "ignore": [
+      "src/styles/*.css"
+    ],
     "generate": "rimraf src/__generated__ && graphql-codegen",
     "prestart": "yarn generate",
     "predev": "yarn generate",
