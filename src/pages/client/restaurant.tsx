@@ -73,21 +73,29 @@ export const Restaurant: React.FC = () => {
     setOrderStarted(true);
   };
 
-  // 주문 담기 리스트에 선택한 메뉴 찾기
+  // 메뉴뉴 담기 리스트에 선택한 메뉴 찾기
   const getOrderItem = (dishId: number) => {
     return orderItems.find((order) => {
       return order.dishId === dishId;
     });
   };
 
-  // 주문 담기 리스트에 선택한 메뉴 존재 여부 체크
+  // 메뉴뉴 담기 리스트에 선택한 메뉴 존재 여부 체크
   const isMenuSelected = (dishId: number) => {
     return Boolean(getOrderItem(dishId));
   };
 
-  // 주문 담기 리스트
+  // 메뉴뉴 담기
   const addItemToOrder = (dishId: number) => {
+    console.log("📢 [restaurant.tsx: 메뉴담기 실행]");
     setOrderItems((current) => [{ dishId, options: [] }, ...current]);
+  };
+
+  // 메뉴 빼기
+  const removeFromOrder = (dishId: number) => {
+    const orderList = orderItems.filter((order) => order.dishId !== dishId);
+    console.log("📢 [restaurant.tsx: 메뉴 빼기 실행]", orderList);
+    setOrderItems(orderList);
   };
 
   if (loading || !restaurantData || !restaurantData?.restaurant.restaurant)
@@ -153,6 +161,7 @@ export const Restaurant: React.FC = () => {
               orderStarted={orderStarted}
               isMenuSelected={isMenuSelected(dish.id)}
               addItemToOrder={addItemToOrder}
+              removeFromOrder={removeFromOrder}
             />
           ))}
         </div>

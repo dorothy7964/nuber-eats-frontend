@@ -12,6 +12,7 @@ interface IDishProps {
   orderStarted?: boolean;
   isMenuSelected?: boolean;
   addItemToOrder?: (dishId: number) => void;
+  removeFromOrder?: (dishId: number) => void;
 }
 
 export const Dish: React.FC<IDishProps> = ({
@@ -24,7 +25,8 @@ export const Dish: React.FC<IDishProps> = ({
   options,
   orderStarted = false, // 오너 화면에서는 주문하기 버튼이 필요없으므로 기본값 false 설정
   isMenuSelected, // 주문 담기 리스트에 선택한 메뉴 존재 여부 체크
-  addItemToOrder = () => {} // 기본 빈 함수 설정
+  addItemToOrder = () => {}, // 기본 빈 함수 설정
+  removeFromOrder = () => {} // 기본 빈 함수 설정
 }) => {
   const formattedNumber = new Intl.NumberFormat("ko-KR", {
     style: "currency",
@@ -34,9 +36,15 @@ export const Dish: React.FC<IDishProps> = ({
   });
 
   const onClickMenu = (dishId: number) => {
-    if (isMenuSelected) return; // 동일 메뉴는 담지 않음
+    // 메뉴 빼기
+    if (isMenuSelected) {
+      return removeFromOrder(dishId);
+    }
 
-    addItemToOrder(dishId);
+    // 메뉴 담기
+    if (!isMenuSelected) {
+      return addItemToOrder(dishId);
+    }
   };
 
   return (
