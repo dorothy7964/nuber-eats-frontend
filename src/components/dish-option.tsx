@@ -7,7 +7,7 @@ interface IDishOptionProps {
   extra?: number | null;
   isSelected: boolean;
   addOptionToItem: (dishId: number, optionName: string) => void;
-  // removeOptionFromItem: (dishId: number, optionName: string) => void;
+  removeOptionFromItem: (dishId: number, optionName: string) => void;
 }
 
 export const DishOption: React.FC<IDishOptionProps> = ({
@@ -15,19 +15,12 @@ export const DishOption: React.FC<IDishOptionProps> = ({
   name,
   extra,
   isSelected,
-  addOptionToItem = () => {} // 기본 빈 함수 설정
-  // removeOptionFromItem,
+  addOptionToItem = () => {}, // 기본 빈 함수 설정
+  removeOptionFromItem = () => {} // 기본 빈 함수 설정
 }) => {
-  // const onClick = () => {
-  //   if (isSelected) {
-  //     removeOptionFromItem(dishId, name);
-  //   } else {
-  //     addOptionToItem(dishId, name);
-  //   }
-  // };
-
   const onClickOption = (dishId: number, optionName: string) => {
-    return addOptionToItem(dishId, optionName);
+    if (isSelected) return removeOptionFromItem(dishId, optionName);
+    if (!isSelected) return addOptionToItem(dishId, optionName);
   };
 
   return (

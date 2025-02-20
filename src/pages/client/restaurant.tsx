@@ -18,6 +18,7 @@ import { PageMeta } from "../../components/pageMeta ";
 import { Dish } from "../../components/dish";
 import { ButtonSpan } from "../../components/buttonSpan";
 import { DishOption } from "../../components/dish-option";
+import { curry } from "cypress/types/lodash";
 
 const RESTAURANT_QUERY = gql`
   query restaurant($input: RestaurantInput!) {
@@ -144,6 +145,19 @@ export const Restaurant: React.FC = () => {
     ]);
   };
 
+  // 메뉴 옵션 제거
+  const removeOptionFromItem = (dishId: number, optionName: string) => {
+    const orderOption = getOrderItem(dishId)?.options;
+    const orderOptionList = orderOption?.filter(
+      (option) => option.name !== optionName
+    );
+    removeFromOrder(dishId);
+    setOrderItems((current) => [
+      { dishId, options: orderOptionList },
+      ...current
+    ]);
+  };
+
   if (loading || !restaurantData || !restaurantData?.restaurant.restaurant)
     return <FullScreenLoader />;
 
@@ -217,6 +231,7 @@ export const Restaurant: React.FC = () => {
                   extra={option.extra}
                   isSelected={isOptionSelected(dish.id, option.name)}
                   addOptionToItem={addOptionToItem}
+                  removeOptionFromItem={removeOptionFromItem}
                 />
               ))}
             </Dish>
