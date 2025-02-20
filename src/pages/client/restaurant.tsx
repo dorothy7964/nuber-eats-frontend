@@ -1,24 +1,24 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import {
   CATEGORY_FRAGMENT,
   DISH_FRAGMENT,
   RESTAURANT_FRAGMENT
 } from "../../fragments";
 
-import { FullScreenLoader } from "../../components/fullScreenLoader";
 import {
   CreateOrderItemInput,
-  OrderItemOptionInputType,
+  CreateOrderMutation,
+  CreateOrderMutationVariables,
   RestaurantQuery,
   RestaurantQueryVariables
 } from "../../__generated__/types";
-import { PageMeta } from "../../components/pageMeta ";
-import { Dish } from "../../components/dish";
 import { ButtonSpan } from "../../components/buttonSpan";
+import { Dish } from "../../components/dish";
 import { DishOption } from "../../components/dish-option";
-import { curry } from "cypress/types/lodash";
+import { FullScreenLoader } from "../../components/fullScreenLoader";
+import { PageMeta } from "../../components/pageMeta ";
 
 const RESTAURANT_QUERY = gql`
   query restaurant($input: RestaurantInput!) {
@@ -46,6 +46,7 @@ const CREATE_ORDER_MUTATION = gql`
     createOrder(input: $input) {
       ok
       error
+      orderId
     }
   }
 `;
@@ -69,12 +70,48 @@ export const Restaurant: React.FC = () => {
 
   const [orderStarted, setOrderStarted] = useState(false); // 주문하기 버튼 클릭 여부
   const [orderItems, setOrderItems] = useState<CreateOrderItemInput[]>([]); // 선택한 메뉴
+  const selectedMenu = orderItems.length !== 0;
 
-  //! console
-  console.log("📢 [restaurant.tsx:orderItems]", orderItems);
+  const history = useHistory();
+  const onCompleted = (data: CreateOrderMutation) => {
+    const {
+      createOrder: { ok, orderId }
+    } = data;
 
-  const triggerStartOrder = () => {
+    if (ok) {
+      history.push(`order/${orderId}`);
+    }
+  };
+
+  const [createOrderMutation, { loading: placingOrder }] = useMutation<
+    CreateOrderMutation,
+    CreateOrderMutationVariables
+  >(CREATE_ORDER_MUTATION, {
+    onCompleted
+  });
+
+  // 주문 하기
+  const triggerConfirmOrder = () => {
+    if (placingOrder) return;
+
     setOrderStarted(true);
+
+    const ok = window.confirm("주문을 하시겠습니까?");
+    if (ok) {
+      createOrderMutation({
+        variables: {
+          input: {
+            restaurantId: +params.id,
+            items: orderItems
+          }
+        }
+      });
+    }
+  };
+
+  // 주문 담기 전체 취소
+  const triggerCancelOrder = () => {
+    setOrderItems([]);
   };
 
   // 메뉴 담기 리스트에 선택한 메뉴 찾기
@@ -190,14 +227,25 @@ export const Restaurant: React.FC = () => {
       </div>
 
       <div className="container mt-20">
-        {/* 주문하기 버튼 */}
-        <div className="flex flex-col items-end">
+        {/* 버튼 : 주문하기, 전체 취소 */}
+        <div className="flex justify-end">
           <ButtonSpan
-            className={orderStarted ? "cursor-progress" : ""}
+            className={`${!selectedMenu && "pointer-events-none"}  ${
+              orderStarted && "cursor-progress"
+            } mr-2`}
             text={orderStarted ? "주문 중..." : "주문하기"}
-            bgColor={orderStarted ? "bg-gray-300" : "bg-lime-600"}
+            bgColor={selectedMenu ? "bg-lime-600" : "bg-gray-300"}
             isArrowVisible={false}
-            onClick={triggerStartOrder}
+            onClick={triggerConfirmOrder}
+          />
+          <ButtonSpan
+            className={`${!selectedMenu && "pointer-events-none"}  ${
+              orderStarted && "cursor-progress"
+            }`}
+            text="전체 취소"
+            bgColor={selectedMenu ? "bg-gray-900" : "bg-gray-300"}
+            isArrowVisible={false}
+            onClick={triggerCancelOrder}
           />
         </div>
 
