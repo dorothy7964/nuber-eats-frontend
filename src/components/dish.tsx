@@ -13,8 +13,15 @@ interface IDishProps {
   isMenuSelected?: boolean;
   addItemToOrder?: (dishId: number) => void;
   removeFromOrder?: (dishId: number) => void;
-  addOptionToItem?: (dishId: number, option: any) => void;
+  children?: React.ReactNode;
 }
+
+export const formattedNumber = new Intl.NumberFormat("ko-KR", {
+  style: "currency",
+  currency: "KRW", // "USD", "KRW", "EUR"
+  minimumFractionDigits: 0 // 원화는 일반적으로 소수점이 없음
+  // useGrouping: false //	천 단위 구분자 사용 여부 (기본값: true)
+});
 
 export const Dish: React.FC<IDishProps> = ({
   id = 0,
@@ -28,15 +35,8 @@ export const Dish: React.FC<IDishProps> = ({
   isMenuSelected, // 주문 담기 리스트에 선택한 메뉴 존재 여부 체크
   addItemToOrder = () => {}, // 기본 빈 함수 설정
   removeFromOrder = () => {}, // 기본 빈 함수 설정
-  addOptionToItem = () => {} // 기본 빈 함수 설정
+  children: dishOptions
 }) => {
-  const formattedNumber = new Intl.NumberFormat("ko-KR", {
-    style: "currency",
-    currency: "KRW", // "USD", "KRW", "EUR"
-    minimumFractionDigits: 0 // 원화는 일반적으로 소수점이 없음
-    // useGrouping: false //	천 단위 구분자 사용 여부 (기본값: true)
-  });
-
   const onClickMenu = (dishId: number) => {
     // 메뉴 빼기
     if (isMenuSelected) {
@@ -47,10 +47,6 @@ export const Dish: React.FC<IDishProps> = ({
     if (!isMenuSelected) {
       return addItemToOrder(dishId);
     }
-  };
-
-  const onClickOption = (dishId: number, option: any) => {
-    return addOptionToItem(dishId, option);
   };
 
   return (
@@ -68,18 +64,7 @@ export const Dish: React.FC<IDishProps> = ({
         {isCustomer && options && options?.length !== 0 && (
           <div className="mb-5">
             <h5 className="mt-8 mb-3 font-bold">- 요리 옵션 -</h5>
-            {options?.map((option, index) => (
-              <span
-                onClick={() => onClickOption(id, { name: option.name })}
-                className="flex items-center p-1 mb-1 cursor-pointer border border-transparent hover:border-lime-600 rounded"
-                key={index}
-              >
-                <h6 className="mr-2">{option.name}</h6>
-                <h6 className="text-sm opacity-75">
-                  {formattedNumber.format(Number(option.extra))}
-                </h6>
-              </span>
-            ))}
+            <div>{dishOptions}</div>
           </div>
         )}
 

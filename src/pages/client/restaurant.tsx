@@ -17,6 +17,7 @@ import {
 import { PageMeta } from "../../components/pageMeta ";
 import { Dish } from "../../components/dish";
 import { ButtonSpan } from "../../components/buttonSpan";
+import { DishOption } from "../../components/dish-option";
 
 const RESTAURANT_QUERY = gql`
   query restaurant($input: RestaurantInput!) {
@@ -82,9 +83,25 @@ export const Restaurant: React.FC = () => {
     });
   };
 
+  // 메뉴 담기 리스트에서 선택한 옵션 찾기
+  const getOptionItem = (dishId: number, optionName: string) => {
+    const orderOption = getOrderItem(dishId)?.options;
+
+    if (orderOption) {
+      return orderOption.find((orderMenuOption) => {
+        return orderMenuOption.name === optionName;
+      });
+    }
+  };
+
   // 메뉴 담기 리스트에 선택한 메뉴 존재 여부 체크
   const isMenuSelected = (dishId: number) => {
     return Boolean(getOrderItem(dishId));
+  };
+
+  // 메뉴 담기 리스트에 선택한 옵션 존재 여부 체크
+  const isOptionSelected = (dishId: number, optionName: string) => {
+    return Boolean(getOptionItem(dishId, optionName));
   };
 
   // 메뉴 담기
@@ -99,21 +116,30 @@ export const Restaurant: React.FC = () => {
   };
 
   // 메뉴 옵션 추가
-  const addOptionToItem = (dishId: number, option: any) => {
+  const addOptionToItem = (dishId: number, optionName: string) => {
     const prevOrderItem = getOrderItem(dishId);
 
     // 이미 담은 메뉴가 있다면 해당 주문 제거 후 옵션 추가해 다시 담기
     if (prevOrderItem) {
-      removeFromOrder(dishId);
-      setOrderItems((current) => [
-        { dishId, options: [option, ...prevOrderItem.options!] },
-        ...current
-      ]);
+      // 이미 선택한 옵션인지 체크
+      const hasOption = isOptionSelected(dishId, optionName);
+      if (!hasOption) {
+        removeFromOrder(dishId);
+        setOrderItems((current) => [
+          {
+            dishId,
+            options: [{ name: optionName }, ...prevOrderItem.options!]
+          },
+          ...current
+        ]);
+        return;
+      }
       return;
     }
 
+    // 메뉴 담기가 되어 있지 않았을 때
     return setOrderItems((current) => [
-      { dishId, options: [option] },
+      { dishId, options: [{ name: optionName }] },
       ...current
     ]);
   };
@@ -182,8 +208,18 @@ export const Restaurant: React.FC = () => {
               isMenuSelected={isMenuSelected(dish.id)}
               addItemToOrder={addItemToOrder}
               removeFromOrder={removeFromOrder}
-              addOptionToItem={addOptionToItem}
-            />
+            >
+              {dish.options?.map((option, index) => (
+                <DishOption
+                  key={index}
+                  dishId={dish.id}
+                  name={option.name}
+                  extra={option.extra}
+                  isSelected={isOptionSelected(dish.id, option.name)}
+                  addOptionToItem={addOptionToItem}
+                />
+              ))}
+            </Dish>
           ))}
         </div>
       </div>
