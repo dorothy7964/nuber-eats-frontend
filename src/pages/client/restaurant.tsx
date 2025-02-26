@@ -205,7 +205,7 @@ export const Restaurant: React.FC = () => {
     <div>
       <PageMeta title={restaurant.name || ""} />
 
-      {/* 커버 이미지 및 레스토랑 정보보 */}
+      {/* 커버 이미지 및 레스토랑 정보 보기 */}
       <div
         className=" bg-gray-800 bg-center bg-cover py-48"
         style={{

@@ -14,6 +14,7 @@ import { MyRestaurants } from "../pages/owner/my-restaurants";
 import { AddRestaurant } from "../pages/owner/add-restaurants";
 import { MyRestaurant } from "../pages/owner/my-restaurant";
 import { AddDish } from "../pages/owner/add-dish";
+import { Order } from "../pages/order";
 
 /* 각 역할별 경로를 정의하는 타입 */
 interface RouteType {
@@ -44,7 +45,8 @@ const routes: Record<UserRole, RouteType[]> = {
 /* 공통 컴포넌트 */
 const commonRoutes: RouteType[] = [
   { path: "/confirm", component: <ConfirmEmail /> },
-  { path: "/edit-profile", component: <EditProfile /> }
+  { path: "/edit-profile", component: <EditProfile /> },
+  { path: "/order/:id", component: <Order /> }
 ];
 
 /* RouteType 배열을 기반으로 <Route> 컴포넌트를 동적으로 생성 */

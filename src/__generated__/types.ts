@@ -678,6 +678,13 @@ export type LoginMutationVariables = Exact<{
 
 export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginOutput', ok?: boolean | null, token?: string | null, error?: string | null } };
 
+export type GetOrderQueryVariables = Exact<{
+  input: GetOrderInput;
+}>;
+
+
+export type GetOrderQuery = { __typename?: 'Query', getOrder: { __typename?: 'GetOrderOutput', ok: boolean, error?: string | null, order?: { __typename?: 'Order', id: number, status: OrderStatus, total?: number | null, driver?: { __typename?: 'User', email: string } | null, customer?: { __typename?: 'User', email: string } | null, restaurant?: { __typename?: 'Restaurant', name: string } | null } | null } };
+
 export type CreateDishMutationVariables = Exact<{
   input: CreateDishInput;
 }>;
@@ -1161,6 +1168,61 @@ export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginM
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const GetOrderDocument = gql`
+    query getOrder($input: GetOrderInput!) {
+  getOrder(input: $input) {
+    ok
+    error
+    order {
+      id
+      status
+      total
+      driver {
+        email
+      }
+      customer {
+        email
+      }
+      restaurant {
+        name
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetOrderQuery__
+ *
+ * To run a query within a React component, call `useGetOrderQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOrderQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOrderQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetOrderQuery(baseOptions: Apollo.QueryHookOptions<GetOrderQuery, GetOrderQueryVariables> & ({ variables: GetOrderQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetOrderQuery, GetOrderQueryVariables>(GetOrderDocument, options);
+      }
+export function useGetOrderLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOrderQuery, GetOrderQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetOrderQuery, GetOrderQueryVariables>(GetOrderDocument, options);
+        }
+export function useGetOrderSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetOrderQuery, GetOrderQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetOrderQuery, GetOrderQueryVariables>(GetOrderDocument, options);
+        }
+export type GetOrderQueryHookResult = ReturnType<typeof useGetOrderQuery>;
+export type GetOrderLazyQueryHookResult = ReturnType<typeof useGetOrderLazyQuery>;
+export type GetOrderSuspenseQueryHookResult = ReturnType<typeof useGetOrderSuspenseQuery>;
+export type GetOrderQueryResult = Apollo.QueryResult<GetOrderQuery, GetOrderQueryVariables>;
 export const CreateDishDocument = gql`
     mutation createDish($input: CreateDishInput!) {
   createDish(input: $input) {
