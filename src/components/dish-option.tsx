@@ -1,5 +1,5 @@
 import React from "react";
-import { formattedNumber } from "./dish";
+import { formatCurrency } from "../common/formatCurrency";
 
 interface IDishOptionProps {
   dishId: number;
@@ -31,7 +31,7 @@ export const DishOption: React.FC<IDishOptionProps> = ({
     >
       <h6 className="mr-2">{name}</h6>
       <h6 className="text-sm opacity-75">
-        {formattedNumber.format(Number(extra))}
+        {formatCurrency.format(Number(extra ?? 0))}
       </h6>
     </span>
   );

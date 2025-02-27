@@ -1,5 +1,6 @@
 import React from "react";
 import { DishOption } from "../__generated__/types";
+import { formatCurrency } from "../common/formatCurrency";
 
 interface IDishProps {
   id?: number;
@@ -15,13 +16,6 @@ interface IDishProps {
   removeFromOrder?: (dishId: number) => void;
   children?: React.ReactNode;
 }
-
-export const formattedNumber = new Intl.NumberFormat("ko-KR", {
-  style: "currency",
-  currency: "KRW", // "USD", "KRW", "EUR"
-  minimumFractionDigits: 0 // 원화는 일반적으로 소수점이 없음
-  // useGrouping: false //	천 단위 구분자 사용 여부 (기본값: true)
-});
 
 export const Dish: React.FC<IDishProps> = ({
   id = 0,
@@ -59,7 +53,7 @@ export const Dish: React.FC<IDishProps> = ({
         {/* 메뉴 정보 */}
         <h3 className="text-lg font-medium ">{name}</h3>
         <h4 className="font-medium text-gray-500">{description}</h4>
-        <h5 className="mt-5">{formattedNumber.format(price)}</h5>
+        <h5 className="mt-5">{formatCurrency.format(price ?? 0)}</h5>
         {/* 옵션 */}
         {isCustomer && options && options?.length !== 0 && (
           <div className="mb-5">
