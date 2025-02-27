@@ -624,6 +624,8 @@ export type DishPartsFragment = { __typename?: 'Dish', id: number, name: string,
 
 export type OrderPartsFragment = { __typename?: 'Order', id: number, total?: number | null, createAt: any };
 
+export type FullOrderPartsFragment = { __typename?: 'Order', id: number, status: OrderStatus, total?: number | null, driver?: { __typename?: 'User', email: string } | null, customer?: { __typename?: 'User', email: string } | null, restaurant?: { __typename?: 'Restaurant', name: string } | null };
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -772,6 +774,22 @@ export const OrderPartsFragmentDoc = gql`
   id
   total
   createAt
+}
+    `;
+export const FullOrderPartsFragmentDoc = gql`
+    fragment FullOrderParts on Order {
+  id
+  status
+  total
+  driver {
+    email
+  }
+  customer {
+    email
+  }
+  restaurant {
+    name
+  }
 }
     `;
 export const VerifiedUserFragmentDoc = gql`
@@ -1174,22 +1192,11 @@ export const GetOrderDocument = gql`
     ok
     error
     order {
-      id
-      status
-      total
-      driver {
-        email
-      }
-      customer {
-        email
-      }
-      restaurant {
-        name
-      }
+      ...FullOrderParts
     }
   }
 }
-    `;
+    ${FullOrderPartsFragmentDoc}`;
 
 /**
  * __useGetOrderQuery__
