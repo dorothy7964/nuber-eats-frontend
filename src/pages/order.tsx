@@ -1,6 +1,11 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql, useQuery, useSubscription } from "@apollo/client";
 import { useParams } from "react-router-dom";
-import { GetOrderQuery, GetOrderQueryVariables } from "../__generated__/types";
+import {
+  GetOrderQuery,
+  GetOrderQueryVariables,
+  OrderUpdatesSubscription,
+  OrderUpdatesSubscriptionVariables
+} from "../__generated__/types";
 import { FULL_ORDER_FRAGMENT } from "../fragments";
 import { PageMeta } from "../components/pageMeta ";
 import { formatCurrency } from "../common/formatCurrency";
@@ -14,6 +19,15 @@ const GET_ORDER = gql`
       order {
         ...FullOrderParts
       }
+    }
+  }
+  ${FULL_ORDER_FRAGMENT}
+`;
+
+const ORDER_SUBSCRIPTION = gql`
+  subscription orderUpdates($input: OrderUpdatesInput!) {
+    orderUpdates(input: $input) {
+      ...FullOrderParts
     }
   }
   ${FULL_ORDER_FRAGMENT}
@@ -36,7 +50,19 @@ export const Order = () => {
       }
     }
   );
-  console.log("📢 [order.tsx:45]", orderData);
+
+  const { data: orderSubscriptionData } = useSubscription<
+    OrderUpdatesSubscription,
+    OrderUpdatesSubscriptionVariables
+  >(ORDER_SUBSCRIPTION, {
+    variables: {
+      input: {
+        id: +params.id
+      }
+    }
+  });
+
+  console.log("📢 [order.tsx:orderSubscriptionData]", orderSubscriptionData);
 
   return (
     <div className="container mt-32 flex justify-center">

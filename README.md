@@ -106,6 +106,14 @@ https://www.cypress.io/
 
 <br/><br/>
 
+## graphql-ws
+
+- subscriptions-transport-ws는 GraphQL 구독(Subscriptions)을 WebSocket을 통해 처리할 수 있도록 도와주는 라이브러리다.
+- 하지만 이 패키지는 더 이상 유지보수되지 않으며, 대신 @apollo/client와 graphql-ws를 사용하는 것이 권장된다.
+- graphql-ws는 subscriptions-transport-ws의 대체 라이브러리이다.
+
+<br/><br/>
+
 # 🚨 Trouble Shooting
 
 - ⭕
