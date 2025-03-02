@@ -15,7 +15,7 @@ const token = localStorage.getItem(LOCALSTORAGE_TOKEN);
 export const isLoggedInVar = makeVar(Boolean(token));
 export const authTokenVar = makeVar(token);
 
-/* HTTP 링크 (Query 및및 Mutation 용) */
+/* HTTP 링크 (Query 및 Mutation 용) */
 const httpLink = createHttpLink({
   // graphql에 URL를 설정하면 apollo httpLink에 보낼 수 있다.
   uri: "http://localhost:4000/graphql"
@@ -35,7 +35,7 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      "X-JWT": authTokenVar() || ""
+      "x-jwt": authTokenVar() || ""
     }
   };
 });

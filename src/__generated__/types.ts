@@ -289,11 +289,6 @@ export type Mutation = {
 };
 
 
-export type MutationReadyTestArgs = {
-  subId: Scalars['Float']['input'];
-};
-
-
 export type MutationCreateAccountArgs = {
   input: CreateAccountInput;
 };
@@ -550,6 +545,7 @@ export type SearchRestaurantOutput = {
 export type Subscription = {
   __typename?: 'Subscription';
   cookedOrders: Order;
+  orderSubscription: Scalars['String']['output'];
   orderUpdates: Order;
   pendingOrders: Order;
 };
