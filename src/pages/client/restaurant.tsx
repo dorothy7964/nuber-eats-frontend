@@ -79,7 +79,7 @@ export const Restaurant: React.FC = () => {
     } = data;
 
     if (ok) {
-      history.push(`order/${orderId}`);
+      history.push(`/order/${orderId}`);
     }
   };
 

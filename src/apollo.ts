@@ -40,6 +40,7 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
+// split을 사용하여 HTTP vs WebSocket 요청을 구분
 // split 함수는 세 가지 매개변수를 받는다:
 // 1. 각 작업을 실행할 때 호출되는 함수
 // 2. 해당 함수가 "truthy" 값을 반환하면 사용할 Link - 함수가 true이면 wsLink 사용용
