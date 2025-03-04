@@ -695,6 +695,13 @@ export type OrderUpdatesSubscriptionVariables = Exact<{
 
 export type OrderUpdatesSubscription = { __typename?: 'Subscription', orderUpdates: { __typename?: 'Order', id: number, status: OrderStatus, total?: number | null, driver?: { __typename?: 'User', email: string } | null, customer?: { __typename?: 'User', email: string } | null, restaurant?: { __typename?: 'Restaurant', name: string } | null } };
 
+export type EditOrderMutationVariables = Exact<{
+  input: EditOrderInput;
+}>;
+
+
+export type EditOrderMutation = { __typename?: 'Mutation', editOrder: { __typename?: 'EditOrderOutput', ok: boolean, error?: string | null } };
+
 export type CreateDishMutationVariables = Exact<{
   input: CreateDishInput;
 }>;
@@ -1273,6 +1280,40 @@ export function useOrderUpdatesSubscription(baseOptions: Apollo.SubscriptionHook
       }
 export type OrderUpdatesSubscriptionHookResult = ReturnType<typeof useOrderUpdatesSubscription>;
 export type OrderUpdatesSubscriptionResult = Apollo.SubscriptionResult<OrderUpdatesSubscription>;
+export const EditOrderDocument = gql`
+    mutation editOrder($input: EditOrderInput!) {
+  editOrder(input: $input) {
+    ok
+    error
+  }
+}
+    `;
+export type EditOrderMutationFn = Apollo.MutationFunction<EditOrderMutation, EditOrderMutationVariables>;
+
+/**
+ * __useEditOrderMutation__
+ *
+ * To run a mutation, you first call `useEditOrderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditOrderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editOrderMutation, { data, loading, error }] = useEditOrderMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useEditOrderMutation(baseOptions?: Apollo.MutationHookOptions<EditOrderMutation, EditOrderMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditOrderMutation, EditOrderMutationVariables>(EditOrderDocument, options);
+      }
+export type EditOrderMutationHookResult = ReturnType<typeof useEditOrderMutation>;
+export type EditOrderMutationResult = Apollo.MutationResult<EditOrderMutation>;
+export type EditOrderMutationOptions = Apollo.BaseMutationOptions<EditOrderMutation, EditOrderMutationVariables>;
 export const CreateDishDocument = gql`
     mutation createDish($input: CreateDishInput!) {
   createDish(input: $input) {

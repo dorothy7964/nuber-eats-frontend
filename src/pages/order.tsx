@@ -1,10 +1,14 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
+  EditOrderMutation,
+  EditOrderMutationVariables,
   GetOrderQuery,
   GetOrderQueryVariables,
-  OrderUpdatesSubscription
+  OrderStatus,
+  OrderUpdatesSubscription,
+  UserRole
 } from "../__generated__/types";
 import { formatCurrency } from "../common/formatCurrency";
 import { OrderStatusKorean } from "../common/orderStatus";
@@ -34,6 +38,15 @@ const ORDER_SUBSCRIPTION = gql`
   ${FULL_ORDER_FRAGMENT}
 `;
 
+const EDIT_ORDER = gql`
+  mutation editOrder($input: EditOrderInput!) {
+    editOrder(input: $input) {
+      ok
+      error
+    }
+  }
+`;
+
 interface IParams {
   id: string;
 }
@@ -41,6 +54,11 @@ interface IParams {
 export const Order = () => {
   const params = useParams<IParams>();
   const { data: userData } = useMe();
+
+  const [editOrderMutation] = useMutation<
+    EditOrderMutation,
+    EditOrderMutationVariables
+  >(EDIT_ORDER);
 
   const { data: orderData, subscribeToMore } = useQuery<
     GetOrderQuery,
@@ -86,6 +104,18 @@ export const Order = () => {
     }
   }, [orderData]);
 
+  const onButtonClick = (newStatus: OrderStatus) => {
+    console.log("📢 [order.tsx:107]", newStatus);
+    editOrderMutation({
+      variables: {
+        input: {
+          id: +params.id,
+          status: newStatus
+        }
+      }
+    });
+  };
+
   return (
     <div className="container mt-32 flex justify-center">
       <PageMeta title={`주문 #${params.id}`} />
@@ -122,22 +152,41 @@ export const Order = () => {
               </span>
             )}
           </div>
-          {/* 유저별 주문 상태 관리 */}
-          {userData?.me.role === "Client" && (
+
+          {/* 고객 전용 / 유저별 주문 상태 관리 */}
+          {userData?.me.role === UserRole.Client && (
             <span className=" text-center mt-5 mb-3  text-2xl text-lime-600">
-              상태:{" "}
-              {orderData?.getOrder.order?.status &&
-                OrderStatusKorean[orderData?.getOrder.order?.status]}
+              상태: {OrderStatusKorean[orderData?.getOrder.order?.status!]}
             </span>
           )}
-          {userData?.me.role === "Owner" && (
+
+          {/* 사장님 전용 / 유저별 주문 상태 관리 */}
+          {userData?.me.role === UserRole.Owner && (
             <>
-              {orderData?.getOrder.order?.status === "Pending" && (
-                <button className="btn">주문 접수</button>
+              {orderData?.getOrder.order?.status === OrderStatus.Pending && (
+                <button
+                  onClick={() => onButtonClick(OrderStatus.Cooking)}
+                  className="btn"
+                >
+                  주문 접수
+                </button>
               )}
-              {orderData?.getOrder.order?.status === "Cooking" && (
-                <button className="btn">조리 완료</button>
+              {orderData?.getOrder.order?.status === OrderStatus.Cooking && (
+                <button
+                  onClick={() => onButtonClick(OrderStatus.Cooked)}
+                  className="btn"
+                >
+                  조리 완료
+                </button>
               )}
+              {/* 접수 대기, 조리중 제외 하고 상태 노출  */}
+              {orderData?.getOrder.order?.status !== OrderStatus.Cooking &&
+                orderData?.getOrder.order?.status !== OrderStatus.Pending && (
+                  <span className=" text-center mt-5 mb-3  text-2xl text-lime-600">
+                    상태:{" "}
+                    {OrderStatusKorean[orderData?.getOrder.order?.status!]}
+                  </span>
+                )}
             </>
           )}
         </div>
