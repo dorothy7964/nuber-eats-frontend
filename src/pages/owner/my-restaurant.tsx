@@ -1,5 +1,5 @@
-import { gql, useQuery } from "@apollo/client";
-import { useParams } from "react-router-dom";
+import { gql, useQuery, useSubscription } from "@apollo/client";
+import { useHistory, useParams } from "react-router-dom";
 import {
   VictoryAxis,
   VictoryChart,
@@ -11,7 +11,8 @@ import {
 } from "victory";
 import {
   MyRestaurantQuery,
-  MyRestaurantQueryVariables
+  MyRestaurantQueryVariables,
+  PendingOrdersSubscription
 } from "../../__generated__/types";
 import { ButtonLink } from "../../components/buttonLink";
 import { ButtonSpan } from "../../components/buttonSpan";
@@ -19,10 +20,12 @@ import { Dish } from "../../components/dish";
 import { PageMeta } from "../../components/pageMeta ";
 import {
   DISH_FRAGMENT,
+  FULL_ORDER_FRAGMENT,
   ORDERS_FRAGMENT,
   RESTAURANT_FRAGMENT
 } from "../../fragments";
 import { useMe } from "../../hooks/useMe";
+import { useEffect } from "react";
 
 export const MY_RESTAURANT_QUERY = gql`
   query myRestaurant($input: MyRestaurantInput!) {
@@ -43,6 +46,15 @@ export const MY_RESTAURANT_QUERY = gql`
   ${RESTAURANT_FRAGMENT}
   ${DISH_FRAGMENT}
   ${ORDERS_FRAGMENT}
+`;
+
+const PENDING_ORDERS_SUBSCRIPTION = gql`
+  subscription pendingOrders {
+    pendingOrders {
+      ...FullOrderParts
+    }
+  }
+  ${FULL_ORDER_FRAGMENT}
 `;
 
 interface IParams {
@@ -68,6 +80,17 @@ export const MyRestaurant: React.FC = () => {
     myRestaurantData?.myRestaurant.restaurant?.orders.length === 0;
 
   const { data: userData } = useMe();
+
+  const { data: subscriptionData } = useSubscription<PendingOrdersSubscription>(
+    PENDING_ORDERS_SUBSCRIPTION
+  );
+
+  const history = useHistory();
+  useEffect(() => {
+    if (subscriptionData?.pendingOrders.id) {
+      history.push(`/order/${subscriptionData.pendingOrders.id}`);
+    }
+  }, [subscriptionData]);
 
   const triggerPaddle = async () => {
     if (userData?.me.email) {

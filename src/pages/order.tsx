@@ -10,6 +10,7 @@ import { formatCurrency } from "../common/formatCurrency";
 import { OrderStatusKorean } from "../common/orderStatus";
 import { PageMeta } from "../components/pageMeta ";
 import { FULL_ORDER_FRAGMENT } from "../fragments";
+import { useMe } from "../hooks/useMe";
 
 const GET_ORDER = gql`
   query getOrder($input: GetOrderInput!) {
@@ -39,6 +40,7 @@ interface IParams {
 
 export const Order = () => {
   const params = useParams<IParams>();
+  const { data: userData } = useMe();
 
   const { data: orderData, subscribeToMore } = useQuery<
     GetOrderQuery,
@@ -120,11 +122,24 @@ export const Order = () => {
               </span>
             )}
           </div>
-          <span className=" text-center mt-5 mb-3  text-2xl text-lime-600">
-            상태:{" "}
-            {orderData?.getOrder.order?.status &&
-              OrderStatusKorean[orderData?.getOrder.order?.status]}
-          </span>
+          {/* 유저별 주문 상태 관리 */}
+          {userData?.me.role === "Client" && (
+            <span className=" text-center mt-5 mb-3  text-2xl text-lime-600">
+              상태:{" "}
+              {orderData?.getOrder.order?.status &&
+                OrderStatusKorean[orderData?.getOrder.order?.status]}
+            </span>
+          )}
+          {userData?.me.role === "Owner" && (
+            <>
+              {orderData?.getOrder.order?.status === "Pending" && (
+                <button className="btn">주문 접수</button>
+              )}
+              {orderData?.getOrder.order?.status === "Cooking" && (
+                <button className="btn">조리 완료</button>
+              )}
+            </>
+          )}
         </div>
       </div>
     </div>

@@ -289,6 +289,11 @@ export type Mutation = {
 };
 
 
+export type MutationReadyTestArgs = {
+  subId: Scalars['Float']['input'];
+};
+
+
 export type MutationCreateAccountArgs = {
   input: CreateAccountInput;
 };
@@ -710,6 +715,11 @@ export type MyRestaurantQueryVariables = Exact<{
 
 
 export type MyRestaurantQuery = { __typename?: 'Query', myRestaurant: { __typename?: 'MyRestaurantOutput', ok: boolean, error?: string | null, restaurant?: { __typename?: 'Restaurant', id: number, name: string, coverImg: string, address: string, isPromoted: boolean, menu: Array<{ __typename?: 'Dish', id: number, name: string, price: number, photo?: string | null, description: string, options?: Array<{ __typename?: 'DishOption', name: string, extra?: number | null, choices?: Array<{ __typename?: 'DishChoice', name: string, extra?: number | null }> | null }> | null }>, orders: Array<{ __typename?: 'Order', id: number, total?: number | null, createAt: any }>, category?: { __typename?: 'Category', name: string } | null } | null } };
+
+export type PendingOrdersSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PendingOrdersSubscription = { __typename?: 'Subscription', pendingOrders: { __typename?: 'Order', id: number, status: OrderStatus, total?: number | null, driver?: { __typename?: 'User', email: string } | null, customer?: { __typename?: 'User', email: string } | null, restaurant?: { __typename?: 'Restaurant', name: string } | null } };
 
 export type MyRestaurantsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1384,6 +1394,35 @@ export type MyRestaurantQueryHookResult = ReturnType<typeof useMyRestaurantQuery
 export type MyRestaurantLazyQueryHookResult = ReturnType<typeof useMyRestaurantLazyQuery>;
 export type MyRestaurantSuspenseQueryHookResult = ReturnType<typeof useMyRestaurantSuspenseQuery>;
 export type MyRestaurantQueryResult = Apollo.QueryResult<MyRestaurantQuery, MyRestaurantQueryVariables>;
+export const PendingOrdersDocument = gql`
+    subscription pendingOrders {
+  pendingOrders {
+    ...FullOrderParts
+  }
+}
+    ${FullOrderPartsFragmentDoc}`;
+
+/**
+ * __usePendingOrdersSubscription__
+ *
+ * To run a query within a React component, call `usePendingOrdersSubscription` and pass it any options that fit your needs.
+ * When your component renders, `usePendingOrdersSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePendingOrdersSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function usePendingOrdersSubscription(baseOptions?: Apollo.SubscriptionHookOptions<PendingOrdersSubscription, PendingOrdersSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<PendingOrdersSubscription, PendingOrdersSubscriptionVariables>(PendingOrdersDocument, options);
+      }
+export type PendingOrdersSubscriptionHookResult = ReturnType<typeof usePendingOrdersSubscription>;
+export type PendingOrdersSubscriptionResult = Apollo.SubscriptionResult<PendingOrdersSubscription>;
 export const MyRestaurantsDocument = gql`
     query myRestaurants {
   myRestaurants {
