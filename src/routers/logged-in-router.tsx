@@ -15,6 +15,7 @@ import { AddRestaurant } from "../pages/owner/add-restaurants";
 import { MyRestaurant } from "../pages/owner/my-restaurant";
 import { AddDish } from "../pages/owner/add-dish";
 import { Order } from "../pages/order";
+import { Dashboard } from "../pages/driver/dashboard";
 
 /* 각 역할별 경로를 정의하는 타입 */
 interface RouteType {
@@ -39,7 +40,7 @@ const routes: Record<UserRole, RouteType[]> = {
     { path: "/restaurant/:id", component: <MyRestaurant /> },
     { path: "/restaurants/:restaurantId/add-dish", component: <AddDish /> }
   ],
-  Delivery: [{ path: "/", component: <div>delivery 페이지</div> }]
+  Delivery: [{ path: "/", component: <Dashboard /> }]
 };
 
 /* 공통 컴포넌트 */
