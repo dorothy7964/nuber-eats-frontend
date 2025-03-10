@@ -1,4 +1,4 @@
-import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import { useEffect, useState, useRef } from "react";
 
 const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || "";
@@ -30,6 +30,7 @@ export const Dashboard = () => {
 
     // 지도 중심 이동
     if (mapRef.current) {
+      console.log("📢 [dashboard.tsx:33] 실행");
       mapRef.current.panTo(newCoords);
     }
   };
@@ -62,7 +63,22 @@ export const Dashboard = () => {
         center={driverCoords}
         zoom={16}
         onLoad={onLoad} // 지도 로드 시 실행
-      />
+      >
+        {/* 🚖 택시 마커 추가 */}
+        <Marker
+          position={driverCoords}
+          icon={{
+            url: "", // 마커 배경
+            scaledSize: new window.google.maps.Size(50, 50) // 아이콘 크기 조절
+          }}
+          label={{
+            text: "🚖",
+            fontSize: "25px",
+            color: "white",
+            fontWeight: "bold"
+          }}
+        />
+      </GoogleMap>
     </div>
   );
 };
