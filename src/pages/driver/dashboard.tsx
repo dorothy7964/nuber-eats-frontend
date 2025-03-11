@@ -30,8 +30,19 @@ export const Dashboard = () => {
 
     // 지도 중심 이동
     if (mapRef.current) {
-      console.log("📢 [dashboard.tsx:33] 실행");
       mapRef.current.panTo(newCoords);
+
+      // 주소를 좌표(위도, 경도)로 변환하는 API
+      const geocoder = new google.maps.Geocoder();
+      geocoder.geocode(
+        {
+          location: new google.maps.LatLng(newCoords.lat, newCoords.lng)
+        },
+        (results, status) => {
+          console.log("📢🟩 results [dashboard.tsx:41]", results);
+          console.log("📢🟩 status [dashboard.tsx:41]", status);
+        }
+      );
     }
   };
 

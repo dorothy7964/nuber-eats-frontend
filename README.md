@@ -131,6 +131,9 @@ https://www.cypress.io/
 
 - 요리 옵션 추가에서 choice 기능 추가 - add-dishss
 
+- 프로필 편집에서 유저 좌표 받아 주소 작성하기 - google.maps.Geocoder 사용 /
+  - driver/dashboard.tsx 참고
+
 <br/><br/>
 
 # 🚀 새로운 기능 아이디어
