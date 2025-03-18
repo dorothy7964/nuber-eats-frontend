@@ -119,6 +119,12 @@ https://www.cypress.io/
 - ⭕
 - ❌
 
+  ## 🚨 Google Maps Directions API 대한민국에서 대중교통(TRANSIT)만 지원
+
+  - 운전(DRIVING), 도보(WALKING), 자전거(BICYCLING) 모드는 제한되어 있다.
+  - 다른 나라의 대부분 도시는 DRIVING 모드를 지원한다.
+  - 국내 지도 API 사용 → 카카오맵, 네이버 지도, 티맵 API 등을 활용하기
+
 <br/><br/>
 
 # 🚀 추가할 기능

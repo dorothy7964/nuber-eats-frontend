@@ -1,5 +1,6 @@
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import { useEffect, useState, useRef } from "react";
+import { ButtonSpan } from "../../components/buttonSpan";
 
 const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || "";
 
@@ -33,6 +34,7 @@ export const Dashboard = () => {
       mapRef.current.panTo(newCoords);
 
       // 주소를 좌표(위도, 경도)로 변환하는 API
+      /* 
       const geocoder = new google.maps.Geocoder();
       geocoder.geocode(
         {
@@ -43,6 +45,7 @@ export const Dashboard = () => {
           console.log("📢🟩 status [dashboard.tsx:41]", status);
         }
       );
+      */
     }
   };
 
@@ -64,19 +67,57 @@ export const Dashboard = () => {
     mapRef.current = map;
     console.log("📢 Google Maps API 로드 완료");
   };
+  /* 길찾기 */
+  const onGetRouteClick = () => {
+    if (mapRef.current) {
+      // DirectionsService와 DirectionsRenderer 초기화
+      const directionsService = new google.maps.DirectionsService();
+      const directionsRenderer = new google.maps.DirectionsRenderer({
+        polylineOptions: { strokeColor: "orange" }
+      });
+      directionsRenderer.setMap(mapRef.current);
+
+      // ! 🚨 Google Maps Directions API 대한민국에서 대중교통(TRANSIT)만 지원
+      // 운전(DRIVING), 도보(WALKING), 자전거(BICYCLING) 모드는 제한되어 있다.
+      // 다른 나라의 대부분 도시는 DRIVING 모드를 지원한다.
+      // 국내 지도 API 사용 → 카카오맵, 네이버 지도, 티맵 API 등을 활용하기
+
+      // 경로 요청
+      directionsService.route(
+        {
+          // 출발지
+          origin: driverCoords,
+          // 목적지 : 아니키아 카페
+          destination: { lat: 37.7283696, lng: 127.1140292 }, // 목적지
+          travelMode: google.maps.TravelMode.TRANSIT // 이동 모드 (대중교통)
+        },
+        // DirectionsService로 경로 요청 후 결과 표시
+        (result, status) => {
+          if (status === google.maps.DirectionsStatus.OK) {
+            console.log("📢 [dashboard.tsx:96] 경로 결과:", result);
+            directionsRenderer.setDirections(result);
+          } else {
+            console.error("📢 [dashboard.tsx:96] 경로 오류 발생:", status);
+            // `ZERO_RESULTS`인 경우 지도에 오류 메시지 표시하거나, 다른 경로를 찾는 방법도 고려
+          }
+        }
+      );
+    }
+  };
 
   if (!isLoaded) return <div>구글 맵 로딩 중...</div>;
 
   return (
-    <div className="overflow-hidden">
-      <GoogleMap
-        mapContainerStyle={containerStyle}
-        center={driverCoords}
-        zoom={16}
-        onLoad={onLoad} // 지도 로드 시 실행
-      >
-        {/* 🚖 택시 마커 추가 */}
-        <Marker
+    <>
+      <div className="overflow-hidden">
+        <GoogleMap
+          mapContainerStyle={containerStyle}
+          center={driverCoords}
+          zoom={16}
+          onLoad={onLoad} // 지도 로드 시 실행
+        >
+          {/* 🚖 택시 마커 추가 */}
+          {/* <Marker
           position={driverCoords}
           icon={{
             url: "", // 마커 배경
@@ -88,8 +129,15 @@ export const Dashboard = () => {
             color: "white",
             fontWeight: "bold"
           }}
-        />
-      </GoogleMap>
-    </div>
+        /> */}
+        </GoogleMap>
+      </div>
+      <ButtonSpan
+        text="경로 찾기"
+        bgColor="bg-lime-600"
+        isArrowVisible={true}
+        onClick={onGetRouteClick}
+      />
+    </>
   );
 };
