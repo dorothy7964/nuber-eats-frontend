@@ -138,7 +138,14 @@ https://www.cypress.io/
 - 요리 옵션 추가에서 choice 기능 추가 - add-dishss
 
 - 프로필 편집에서 유저 좌표 받아 주소 작성하기 - google.maps.Geocoder 사용 /
+
   - driver/dashboard.tsx 참고
+
+- 주문에 배달 주소를 추가하기 - driver/dashboard
+  - makeRoute()에 주문한 고객 주소 넣기
+  - 주문하는 고객 주소 데이터 추가하기
+  - 주문이 subscription으로 들어오면 배달원에게 예상 경로 보여주기
+  - 경로를 보고 난 후 배달원이 배달 진행 여부 결정하기
 
 <br/><br/>
 

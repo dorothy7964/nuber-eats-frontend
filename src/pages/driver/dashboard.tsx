@@ -1,8 +1,20 @@
-import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
-import { useEffect, useState, useRef } from "react";
-import { ButtonSpan } from "../../components/buttonSpan";
+import { gql, useSubscription } from "@apollo/client";
+import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
+import { useEffect, useRef, useState } from "react";
+import { CoockedOrdersSubscription } from "../../__generated__/types";
+import { ButtonLink } from "../../components/buttonLink";
+import { FULL_ORDER_FRAGMENT } from "../../fragments";
 
 const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || "";
+
+const COOCKED_ORDERS_SUBSCRIPTION = gql`
+  subscription coockedOrders {
+    cookedOrders {
+      ...FullOrderParts
+    }
+  }
+  ${FULL_ORDER_FRAGMENT}
+`;
 
 interface ICoords {
   lat: number;
@@ -68,7 +80,7 @@ export const Dashboard = () => {
     console.log("📢 Google Maps API 로드 완료");
   };
   /* 길찾기 */
-  const onGetRouteClick = () => {
+  const makeRoute = () => {
     if (mapRef.current) {
       // DirectionsService와 DirectionsRenderer 초기화
       const directionsService = new google.maps.DirectionsService();
@@ -105,6 +117,23 @@ export const Dashboard = () => {
     }
   };
 
+  /* COOCKED_ORDERS_SUBSCRIPTION  */
+  const { data: coockedOrdersData } =
+    useSubscription<CoockedOrdersSubscription>(COOCKED_ORDERS_SUBSCRIPTION);
+
+  useEffect(() => {
+    // 조리 완료된 주문이 배달을 기다리는다는 것을 의미
+    if (coockedOrdersData?.cookedOrders.id) {
+      console.log(
+        "📢 COOCKED_ORDERS_SUBSCRIPTION [dashboard.tsx:124]",
+        coockedOrdersData
+      );
+      makeRoute();
+    }
+  }, [coockedOrdersData]);
+
+  const newCookedOrder = coockedOrdersData?.cookedOrders.restaurant;
+
   if (!isLoaded) return <div>구글 맵 로딩 중...</div>;
 
   return (
@@ -132,12 +161,36 @@ export const Dashboard = () => {
         /> */}
         </GoogleMap>
       </div>
-      <ButtonSpan
-        text="경로 찾기"
-        bgColor="bg-lime-600"
-        isArrowVisible={true}
-        onClick={onGetRouteClick}
-      />
+
+      <div className="max-w-screen-sm mx-auto bg-white relative -top-10 shadow-lg py-8 px-5">
+        {/* 신규 조리 완료 */}
+        {newCookedOrder && (
+          <>
+            <h1 className="text-center text-3xl font-medium">
+              신규 조리 완료 주문
+            </h1>
+            <h2 className="text-center my-3 text-xl font-medium">
+              빠르게 수령해 주세요. @{" "}
+              {coockedOrdersData?.cookedOrders.restaurant?.name}
+            </h2>
+
+            <ButtonLink
+              className="btn w-full  block  text-center mt-5"
+              text="배달 수락"
+              bgColor="bg-lime-600"
+              isArrowVisible={true}
+              toLink={`/order/${coockedOrdersData?.cookedOrders.id}`}
+            />
+          </>
+        )}
+
+        {/* 신규 조리 완료 없음 */}
+        {!newCookedOrder && (
+          <h1 className="text-center text-3xl font-medium">
+            아직 주문이 없습니다...
+          </h1>
+        )}
+      </div>
     </>
   );
 };
