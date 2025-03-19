@@ -70,6 +70,7 @@ export const Order = () => {
       }
     }
   });
+  console.log("📢 [order.tsx:73]", orderData);
 
   useEffect(() => {
     if (orderData?.getOrder.ok) {
@@ -188,6 +189,35 @@ export const Order = () => {
                   </span>
                 )}
             </>
+          )}
+
+          {/* 배달원원 전용 / 유저별 주문 상태 관리 */}
+          {userData?.me.role === UserRole.Delivery && (
+            <>
+              {orderData?.getOrder.order?.status === OrderStatus.Cooked && (
+                <button
+                  onClick={() => onButtonClick(OrderStatus.PickedUp)}
+                  className="btn"
+                >
+                  배달 시작
+                </button>
+              )}
+              {orderData?.getOrder.order?.status === OrderStatus.PickedUp && (
+                <button
+                  onClick={() => onButtonClick(OrderStatus.Delivered)}
+                  className="btn"
+                >
+                  배달 완료
+                </button>
+              )}
+            </>
+          )}
+
+          {/* 배달 완료 시 / 전체 공개 */}
+          {orderData?.getOrder.order?.status === OrderStatus.Delivered && (
+            <span className=" text-center mt-5 mb-3 text-2xl text-lime-600">
+              이용해 주셔서 감사합니다.
+            </span>
           )}
         </div>
       </div>

@@ -679,6 +679,13 @@ export type CoockedOrdersSubscriptionVariables = Exact<{ [key: string]: never; }
 
 export type CoockedOrdersSubscription = { __typename?: 'Subscription', cookedOrders: { __typename?: 'Order', id: number, status: OrderStatus, total?: number | null, driver?: { __typename?: 'User', email: string } | null, customer?: { __typename?: 'User', email: string } | null, restaurant?: { __typename?: 'Restaurant', name: string } | null } };
 
+export type TakeOrderMutationVariables = Exact<{
+  input: TakeOrderInput;
+}>;
+
+
+export type TakeOrderMutation = { __typename?: 'Mutation', takeOrder: { __typename?: 'TakeOrderOutput', ok: boolean, error?: string | null } };
+
 export type LoginMutationVariables = Exact<{
   loginInput: LoginInput;
 }>;
@@ -1205,6 +1212,40 @@ export function useCoockedOrdersSubscription(baseOptions?: Apollo.SubscriptionHo
       }
 export type CoockedOrdersSubscriptionHookResult = ReturnType<typeof useCoockedOrdersSubscription>;
 export type CoockedOrdersSubscriptionResult = Apollo.SubscriptionResult<CoockedOrdersSubscription>;
+export const TakeOrderDocument = gql`
+    mutation takeOrder($input: TakeOrderInput!) {
+  takeOrder(input: $input) {
+    ok
+    error
+  }
+}
+    `;
+export type TakeOrderMutationFn = Apollo.MutationFunction<TakeOrderMutation, TakeOrderMutationVariables>;
+
+/**
+ * __useTakeOrderMutation__
+ *
+ * To run a mutation, you first call `useTakeOrderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useTakeOrderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [takeOrderMutation, { data, loading, error }] = useTakeOrderMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useTakeOrderMutation(baseOptions?: Apollo.MutationHookOptions<TakeOrderMutation, TakeOrderMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<TakeOrderMutation, TakeOrderMutationVariables>(TakeOrderDocument, options);
+      }
+export type TakeOrderMutationHookResult = ReturnType<typeof useTakeOrderMutation>;
+export type TakeOrderMutationResult = Apollo.MutationResult<TakeOrderMutation>;
+export type TakeOrderMutationOptions = Apollo.BaseMutationOptions<TakeOrderMutation, TakeOrderMutationVariables>;
 export const LoginDocument = gql`
     mutation login($loginInput: LoginInput!) {
   login(input: $loginInput) {

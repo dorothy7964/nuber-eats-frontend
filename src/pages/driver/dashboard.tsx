@@ -1,9 +1,14 @@
-import { gql, useSubscription } from "@apollo/client";
+import { gql, useMutation, useSubscription } from "@apollo/client";
 import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
 import { useEffect, useRef, useState } from "react";
-import { CoockedOrdersSubscription } from "../../__generated__/types";
-import { ButtonLink } from "../../components/buttonLink";
+import {
+  CoockedOrdersSubscription,
+  TakeOrderMutation,
+  TakeOrderMutationVariables
+} from "../../__generated__/types";
+import { ButtonSpan } from "../../components/buttonSpan";
 import { FULL_ORDER_FRAGMENT } from "../../fragments";
+import { useHistory } from "react-router-dom";
 
 const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || "";
 
@@ -14,6 +19,15 @@ const COOCKED_ORDERS_SUBSCRIPTION = gql`
     }
   }
   ${FULL_ORDER_FRAGMENT}
+`;
+
+const TAKE_ORDER_MUTATION = gql`
+  mutation takeOrder($input: TakeOrderInput!) {
+    takeOrder(input: $input) {
+      ok
+      error
+    }
+  }
 `;
 
 interface ICoords {
@@ -134,6 +148,32 @@ export const Dashboard = () => {
 
   const newCookedOrder = coockedOrdersData?.cookedOrders.restaurant;
 
+  /* 배달원 등록하기 */
+  const history = useHistory();
+  const onCompleted = (data: TakeOrderMutation) => {
+    if (data.takeOrder.ok) {
+      console.log("📢실행 [dashboard.tsx:155]", data.takeOrder);
+      history.push(`/order/${coockedOrdersData?.cookedOrders.id}`);
+    }
+  };
+
+  const [takeOrderMutation] = useMutation<
+    TakeOrderMutation,
+    TakeOrderMutationVariables
+  >(TAKE_ORDER_MUTATION, {
+    onCompleted
+  });
+
+  const triggerMutation = (orderId: number) => {
+    takeOrderMutation({
+      variables: {
+        input: {
+          id: orderId
+        }
+      }
+    });
+  };
+
   if (!isLoaded) return <div>구글 맵 로딩 중...</div>;
 
   return (
@@ -173,13 +213,14 @@ export const Dashboard = () => {
               빠르게 수령해 주세요. @{" "}
               {coockedOrdersData?.cookedOrders.restaurant?.name}
             </h2>
-
-            <ButtonLink
-              className="btn w-full  block  text-center mt-5"
+            <ButtonSpan
               text="배달 수락"
               bgColor="bg-lime-600"
               isArrowVisible={true}
-              toLink={`/order/${coockedOrdersData?.cookedOrders.id}`}
+              onClick={() =>
+                triggerMutation(coockedOrdersData?.cookedOrders.id)
+              }
+              className="btn w-full  block  text-center mt-5"
             />
           </>
         )}
