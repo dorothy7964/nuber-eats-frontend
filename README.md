@@ -159,4 +159,8 @@ https://www.cypress.io/
 
 FRONTEND
 
+- Netlify
+
 BACKEND
+
+- Render

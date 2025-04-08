@@ -41,6 +41,7 @@
     "generate": "rimraf src/__generated__ && graphql-codegen",
     "prestart": "yarn generate",
     "predev": "yarn generate",
+    "prebuild": "npm run tailwind:build",
     "build": "react-scripts build",
     "test": "react-scripts test --verbose",
     "test:coverage": "npm test -- --coverage --watchAll=false",
