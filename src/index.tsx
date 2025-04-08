@@ -5,7 +5,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { client } from "./apollo";
 import reportWebVitals from "./reportWebVitals";
 import "./styles/styles.css";
-import { App } from "./components/app";
+import { App } from "./components/AppTest";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
