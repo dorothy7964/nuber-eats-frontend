@@ -3,9 +3,9 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import { client } from "./apollo";
+import { App } from "./components/App";
 import reportWebVitals from "./reportWebVitals";
 import "./styles/styles.css";
-import { App } from "./components/AppTest";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
