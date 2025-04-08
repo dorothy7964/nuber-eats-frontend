@@ -11,7 +11,7 @@ export const PageButton: React.FC<PageButtonProps> = ({
   onNextPageClick,
   onPrevPageClick
 }) => {
-  if (totalPages === 0 || !totalPages) return;
+  if (totalPages === 0 || !totalPages) return null;
 
   return (
     <div className="grid grid-cols-3 text-center max-w-md items-center mx-auto mt-10">
