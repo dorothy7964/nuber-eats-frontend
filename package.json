@@ -33,21 +33,23 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "tailwind:build": "tailwindcss -i ./src/styles/tailwind.css -o ./src/styles/styles.css --watch",
-    "start": "cross-env BROWSER=none concurrently \"nodemon --watch src --exec react-scripts start\" \"npm run tailwind:build\"",
+    "tailwind:watch": "tailwindcss -i ./src/styles/tailwind.css -o ./src/styles/styles.css --watch",
+    "tailwind:prod": "tailwindcss -i ./src/styles/tailwind.css -o ./src/styles/styles.css --minify",
+    "tailwind:build": "tailwindcss -i ./src/styles/tailwind.css -o ./src/styles/styles.css",
+    "start": "cross-env BROWSER=none concurrently \"nodemon --watch src --exec react-scripts start\" \"npm run tailwind:watch\"",
     "start:prod": "npm run tailwind:build && npm run build",
-    "ignore": [
-      "src/styles/*.css"
-    ],
+    "build": "CI=false react-scripts build",
+    "prebuild": "npm run tailwind:prod",
     "generate": "rimraf src/__generated__ && graphql-codegen",
     "prestart": "yarn generate",
     "predev": "yarn generate",
-    "prebuild": "npm run tailwind:build",
-    "build": "CI=false react-scripts build",
     "test": "react-scripts test --verbose",
     "test:coverage": "npm test -- --coverage --watchAll=false",
     "eject": "react-scripts eject",
-    "codegen": "graphql-codegen --config codegen.ts"
+    "codegen": "graphql-codegen --config codegen.ts",
+    "ignore": [
+      "src/styles/*.css"
+    ]
   },
   "eslintConfig": {
     "extends": [
