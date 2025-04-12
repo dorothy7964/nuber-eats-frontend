@@ -66,7 +66,7 @@ export const Login = () => {
   return (
     <LogoLayout
       helmetTitle="로그인"
-      title="다시 오신 것을 환영합니다."
+      title="다시 오신 것을 환영합니다. [TEST] 개발모드에서만 노출되어야 한다."
       question="계정이 없으신가요?"
       linkText="계정 만들기"
       linkTo="/create-account"
