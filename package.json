@@ -35,7 +35,7 @@
   "scripts": {
     "tailwind:build": "tailwindcss -i ./src/styles/tailwind.css -o ./src/styles/styles.css --watch",
     "start": "cross-env BROWSER=none concurrently \"nodemon --watch src --exec react-scripts start\" \"npm run tailwind:build\"",
-    "deploy": "npm run generate && npm run build",
+    "start:prod": "npm run generate && npm run build",
     "ignore": [
       "src/styles/*.css"
     ],
