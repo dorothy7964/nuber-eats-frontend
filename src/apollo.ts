@@ -20,7 +20,7 @@ const httpLink = createHttpLink({
   // graphql에 URL를 설정하면 apollo httpLink에 보낼 수 있다.
   uri:
     process.env.NODE_ENV === "production"
-      ? process.env.RENDER_API_URL
+      ? process.env.NEXT_PUBLIC_RENDER_API_URL
       : "http://localhost:4000/graphql"
 });
 
@@ -29,7 +29,7 @@ const wsLink = new GraphQLWsLink(
   createClient({
     url:
       process.env.NODE_ENV === "production"
-        ? (process.env.RENDER_WSS_API_URL as string)
+        ? (process.env.NEXT_PUBLIC_WSS_RENDER_API_URL as string)
         : "ws://localhost:4000/graphql", // WebSocket 서버 URL
     connectionParams: {
       "x-jwt": authTokenVar() || "" // 인증 토큰 전달
