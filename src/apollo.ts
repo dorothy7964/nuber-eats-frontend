@@ -15,12 +15,14 @@ const token = localStorage.getItem(LOCALSTORAGE_TOKEN);
 export const isLoggedInVar = makeVar(Boolean(token));
 export const authTokenVar = makeVar(token);
 
+console.log("📢 [apollo.ts:18]", process.env.NEXT_PUBLIC_RENDER_API_URLS);
+
 /* HTTP 링크 (Query 및 Mutation 용) */
 const httpLink = createHttpLink({
   // graphql에 URL를 설정하면 apollo httpLink에 보낼 수 있다.
   uri:
     process.env.NODE_ENV === "production"
-      ? process.env.NEXT_PUBLIC_RENDER_API_URL
+      ? process.env.NEXT_PUBLIC_RENDER_API_URLS
       : "http://localhost:4000/graphql"
 });
 
@@ -29,7 +31,7 @@ const wsLink = new GraphQLWsLink(
   createClient({
     url:
       process.env.NODE_ENV === "production"
-        ? (process.env.NEXT_PUBLIC_WSS_RENDER_API_URL as string)
+        ? (process.env.NEXT_PUBLIC_WSS_RENDER_API_URLS as string)
         : "ws://localhost:4000/graphql", // WebSocket 서버 URL
     connectionParams: {
       "x-jwt": authTokenVar() || "" // 인증 토큰 전달
