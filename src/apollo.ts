@@ -18,13 +18,19 @@ export const authTokenVar = makeVar(token);
 /* HTTP 링크 (Query 및 Mutation 용) */
 const httpLink = createHttpLink({
   // graphql에 URL를 설정하면 apollo httpLink에 보낼 수 있다.
-  uri: "http://localhost:4000/graphql"
+  uri:
+    process.env.NODE_ENV === "production"
+      ? process.env.RENDER_API_URL
+      : "http://localhost:4000/graphql"
 });
 
 /* WebSocket 링크 (구독용) */
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: "ws://localhost:4000/graphql", // WebSocket 서버 URL
+    url:
+      process.env.NODE_ENV === "production"
+        ? (process.env.RENDER_WSS_API_URL as string)
+        : "ws://localhost:4000/graphql", // WebSocket 서버 URL
     connectionParams: {
       "x-jwt": authTokenVar() || "" // 인증 토큰 전달
     }
