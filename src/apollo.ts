@@ -15,15 +15,14 @@ const token = localStorage.getItem(LOCALSTORAGE_TOKEN);
 export const isLoggedInVar = makeVar(Boolean(token));
 export const authTokenVar = makeVar(token);
 
-console.log("📢 [apollo.ts:18]", process.env.NEXT_PUBLIC_RENDER_API_URLS);
-
 /* HTTP 링크 (Query 및 Mutation 용) */
 const httpLink = createHttpLink({
   // graphql에 URL를 설정하면 apollo httpLink에 보낼 수 있다.
   uri:
     process.env.NODE_ENV === "production"
       ? "https://nuber-eats-backend-tegt.onrender.com/graphql"
-      : "http://localhost:4000/graphql"
+      : "http://localhost:4000/graphql",
+  credentials: "include" // 프론트엔드에서도 쿠키를 포함해서 요청하도록 Apollo Client 설정
 });
 
 /* WebSocket 링크 (구독용) */
