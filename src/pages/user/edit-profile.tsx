@@ -9,6 +9,7 @@ import { Title } from "../../components/title";
 import { useMe } from "../../hooks/useMe";
 import { AuthForm } from "../../layout/authForm";
 import { AuthFormLayout } from "../../layout/authFormLayout";
+import { LogoutButton } from "../../components/logoutButton";
 
 const EDIT_PROFILE_MUTATION = gql`
   mutation editProfile($input: EditProfileInput!) {
@@ -106,6 +107,10 @@ export const EditProfile = () => {
         loading={loading}
         buttonText="프로필 저장"
       />
+
+      <div className="mt-20 text-gray-500">
+        <LogoutButton />
+      </div>
     </AuthFormLayout>
   );
 };
