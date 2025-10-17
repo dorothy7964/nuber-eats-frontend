@@ -1,11 +1,12 @@
-import { gql, useQuery } from "@apollo/client";
 import { Link, useParams } from "react-router-dom";
+import { MenuIcon } from "./menuIcon";
+import { gql, useQuery } from "@apollo/client";
+import { CATEGORY_FRAGMENT } from "../fragments";
 import {
   AllCategoriesQuery,
   AllCategoriesQueryVariables
 } from "../__generated__/types";
-import { CATEGORY_FRAGMENT } from "../fragments";
-import { MenuIcon } from "./menuIcon";
+import { MenuTitle } from "./menuTitle.";
 
 export const ALLCATEGORY_QUERY = gql`
   query allCategories {
@@ -46,13 +47,10 @@ export const CategoryList: React.FC = () => {
             >
               <MenuIcon coverImg={category.slug} />
             </div>
-            <span
-              className={`mt-1 text-sm text-center ${
-                category.slug === params.slug ? "font-bold" : "font-medium"
-              }`}
-            >
-              {category.name}
-            </span>
+            <MenuTitle
+              slug={category.slug}
+              highlight={category.slug === params.slug}
+            />
           </div>
         </Link>
       ))}
