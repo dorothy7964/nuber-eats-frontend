@@ -7,6 +7,7 @@ const menuNameMap: Record<string, string> = {
   hamburger: "햄버거",
   tteokbokki: "떡볶이",
   dessert: "디저트",
+  salad: "샐러드",
   basic: "기본"
 };
 

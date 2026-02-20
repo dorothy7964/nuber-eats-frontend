@@ -5,6 +5,7 @@ import sushi from "../images/sushi.png";
 import hamburger from "../images/hamburger.png";
 import tteokbokki from "../images/tteokbokki.png";
 import dessert from "../images/dessert.png";
+import salad from "../images/salad.png";
 import basic from "../images/basic-menu.png";
 
 // 카테고리 이름에 따른 아이콘 매핑
@@ -16,6 +17,7 @@ const menuIconMap: any = {
   hamburger,
   tteokbokki,
   dessert,
+  salad,
   basic
 };
 
