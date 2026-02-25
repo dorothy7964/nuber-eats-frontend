@@ -4,18 +4,19 @@ import { FullScreenLoader } from "../components/fullScreenLoader";
 import { Header } from "../components/header";
 import { useMe } from "../hooks/useMe";
 import { NotFound } from "../pages/404";
+import { AdminDashboard } from "../pages/admin/adminDashboard";
 import { Category } from "../pages/client/category";
 import { Restaurant } from "../pages/client/restaurant";
 import { Restaurants } from "../pages/client/restaurants";
 import { Search } from "../pages/client/search";
-import { ConfirmEmail } from "../pages/user/confirm-email";
-import { EditProfile } from "../pages/user/edit-profile";
-import { MyRestaurants } from "../pages/owner/my-restaurants";
+import { Dashboard } from "../pages/driver/dashboard";
+import { Order } from "../pages/order";
+import { AddDish } from "../pages/owner/add-dish";
 import { AddRestaurant } from "../pages/owner/add-restaurants";
 import { MyRestaurant } from "../pages/owner/my-restaurant";
-import { AddDish } from "../pages/owner/add-dish";
-import { Order } from "../pages/order";
-import { Dashboard } from "../pages/driver/dashboard";
+import { MyRestaurants } from "../pages/owner/my-restaurants";
+import { ConfirmEmail } from "../pages/user/confirm-email";
+import { EditProfile } from "../pages/user/edit-profile";
 
 /* 각 역할별 경로를 정의하는 타입 */
 interface RouteType {
@@ -25,7 +26,7 @@ interface RouteType {
 
 /* 각 역할별 경로를 정의 */
 const routes: Record<UserRole, RouteType[]> = {
-  Admin: [{ path: "/", component: <div>진행중</div> }],
+  Admin: [{ path: "/", component: <AdminDashboard /> }],
   Client: [
     { path: "/", component: <Restaurants /> },
     { path: "/search", component: <Search /> },
@@ -71,6 +72,7 @@ export const LoggedInRouter = () => {
     <Router>
       <Header />
       <Switch>
+        {me.role === UserRole.Admin && mapRoutes(routes.Admin)}
         {me.role === UserRole.Client && mapRoutes(routes.Client)}
         {me.role === UserRole.Owner && mapRoutes(routes.Owner)}
         {me.role === UserRole.Delivery && mapRoutes(routes.Delivery)}
