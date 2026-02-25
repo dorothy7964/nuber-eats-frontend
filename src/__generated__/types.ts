@@ -25,6 +25,13 @@ export type AllCategoriesOutput = {
   ok: Scalars['Boolean']['output'];
 };
 
+export type AllUsersOutput = {
+  __typename?: 'AllUsersOutput';
+  error?: Maybe<Scalars['String']['output']>;
+  ok: Scalars['Boolean']['output'];
+  users?: Maybe<Array<User>>;
+};
+
 export type Category = {
   __typename?: 'Category';
   coverImg?: Maybe<Scalars['String']['output']>;
@@ -440,6 +447,7 @@ export type Payment = {
 export type Query = {
   __typename?: 'Query';
   allCategories: AllCategoriesOutput;
+  allUsers: AllUsersOutput;
   category: CategoryOutput;
   getOrder: GetOrderOutput;
   getOrders: GetOrdersOutput;
@@ -594,6 +602,8 @@ export type UserProfileOutput = {
 
 /** 유저 타입 */
 export enum UserRole {
+  /** 슈퍼 관리자 */
+  Admin = 'Admin',
   /** 고객 */
   Client = 'Client',
   /** 배달원 */

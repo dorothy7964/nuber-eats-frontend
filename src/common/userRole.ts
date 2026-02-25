@@ -4,5 +4,6 @@ import { UserRole } from "../__generated__/types";
 export const roleLabels: Record<UserRole, string> = {
   [UserRole.Client]: "고객",
   [UserRole.Owner]: "사장",
-  [UserRole.Delivery]: "배달원"
+  [UserRole.Delivery]: "배달원",
+  [UserRole.Admin]: "슈퍼 관리자"
 };

@@ -25,6 +25,7 @@ interface RouteType {
 
 /* 각 역할별 경로를 정의 */
 const routes: Record<UserRole, RouteType[]> = {
+  Admin: [{ path: "/", component: <div>진행중</div> }],
   Client: [
     { path: "/", component: <Restaurants /> },
     { path: "/search", component: <Search /> },
