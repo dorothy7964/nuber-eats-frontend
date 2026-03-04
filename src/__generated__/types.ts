@@ -71,6 +71,19 @@ export type CreateAccountOutput = {
   ok?: Maybe<Scalars['Boolean']['output']>;
 };
 
+export type CreateAdminInput = {
+  email: Scalars['String']['input'];
+  isSuperAdmin: Scalars['Boolean']['input'];
+  password: Scalars['String']['input'];
+  role: UserRole;
+};
+
+export type CreateAdminOutput = {
+  __typename?: 'CreateAdminOutput';
+  error?: Maybe<Scalars['String']['output']>;
+  ok?: Maybe<Scalars['Boolean']['output']>;
+};
+
 export type CreateDishInput = {
   description: Scalars['String']['input'];
   name: Scalars['String']['input'];
@@ -280,6 +293,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   ReadyTest: Scalars['Boolean']['output'];
   createAccount: CreateAccountOutput;
+  createAdmin: CreateAdminOutput;
   createDish: CreateDishOutput;
   createOrder: CreateOrderOutput;
   createPayment: CreatePaymentOuput;
@@ -303,6 +317,11 @@ export type MutationReadyTestArgs = {
 
 export type MutationCreateAccountArgs = {
   input: CreateAccountInput;
+};
+
+
+export type MutationCreateAdminArgs = {
+  input: CreateAdminInput;
 };
 
 
@@ -583,6 +602,7 @@ export type User = {
   createAt: Scalars['DateTime']['output'];
   email: Scalars['String']['output'];
   id: Scalars['Float']['output'];
+  isSuperAdmin: Scalars['Boolean']['output'];
   orders: Array<Order>;
   password: Scalars['String']['output'];
   payments: Array<Payment>;
@@ -602,7 +622,7 @@ export type UserProfileOutput = {
 
 /** 유저 타입 */
 export enum UserRole {
-  /** 슈퍼 관리자 */
+  /** 관리자 */
   Admin = 'Admin',
   /** 고객 */
   Client = 'Client',
