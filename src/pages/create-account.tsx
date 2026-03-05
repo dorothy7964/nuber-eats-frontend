@@ -90,14 +90,16 @@ export const CreateAccount = () => {
         buttonText="계정 만들기"
       >
         <select {...register("role")} className="input">
-          {Object.keys(UserRole).map((roleKey, index) => {
-            const roleValue = UserRole[roleKey as keyof typeof UserRole];
-            return (
-              <option key={index} value={roleValue}>
-                {roleLabels[roleValue]}
-              </option>
-            );
-          })}
+          {Object.keys(UserRole)
+            .filter((roleKey) => roleKey !== "Admin")
+            .map((roleKey, index) => {
+              const roleValue = UserRole[roleKey as keyof typeof UserRole];
+              return (
+                <option key={index} value={roleValue}>
+                  {roleLabels[roleValue]}
+                </option>
+              );
+            })}
         </select>
         {createAccountMutationResult?.createAccount.error && (
           <FormError
